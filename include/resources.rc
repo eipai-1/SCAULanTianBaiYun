@@ -1,0 +1,5 @@
+character BITMAP "resources/bmp/character.bmp"
+background BITMAP "resources/bmp/bkgrd.bmp"
+character2 BITMAP "resources/bmp/character2.bmp"
+bullet BITMAP "resources/bmp/bullet.bmp"
+bullet2 BITMAP "resources/bmp/bullet-2.bmp"

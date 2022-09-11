@@ -1,0 +1,32 @@
+# depslib dependency file v1.0
+1662891323 source:d:\1\program\project\gameprojectv0.1\main.cpp
+	<windows.h>
+	"include/My_header.h"
+	"include/BulletList.h"
+
+1662814368 source:d:\1\program\project\gameprojectv0.1\resources.rc
+
+1662814600 source:d:\1\program\project\gameprojectv0.1\my_headr.cpp
+	"My_header.h"
+
+1662815529 d:\1\program\project\gameprojectv0.1\my_header.h
+	<windows.h>
+
+1662814600 source:d:\1\program\project\gameprojectv0.1\include\my_headr.cpp
+	"My_header.h"
+
+1662878362 d:\1\program\project\gameprojectv0.1\include\my_header.h
+	<windows.h>
+
+1662876893 source:d:\1\program\project\gameprojectv0.1\include\resources.rc
+
+1662878559 source:d:\1\program\project\gameprojectv0.1\include\my_header.cpp
+	"My_header.h"
+	<cmath>
+
+1662883861 source:d:\1\program\project\gameprojectv0.1\include\bulletlist.cpp
+	<stdio.h>
+	"BulletList.h"
+
+1662878559 d:\1\program\project\gameprojectv0.1\include\bulletlist.h
+
