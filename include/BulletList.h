@@ -1,29 +1,31 @@
 #ifndef BULLETLIST_H_
 #define BULLETLIST_H_
 
+//弹幕结构体
 typedef struct Bullet_Info{
-	int x, y;
+	float x, y;
+	float vx, vy;
 	int belongs;
-	int v_x, v_y, vel;
-	int wid = 15;
-	struct Bullet_Info *next;
 }Bullet_Info, *BulletList;
 
-/*
-使用.cpp文件实现接口
-函数参数可以改，只要功能实现了
-*/
-
-void BulletList_Init(BulletList &new_node);//初始化节点new_node
-void BulletList_Insert(BulletList &pre, BulletList &new_node);//在所给节点pre 后插入新节点new_node
-void BulletList_Delete(BulletList &pre);//删除所给节点的后一位节点
-int BulletList_IsEmpty(BulletList &head);//判断是否为空链表
-
-//BulletList_init
-//BulletList_Insert  插入的结点参数要先初始化
 //
-//BulletList_IsEmpty 是空则返回1
+typedef struct myadt_bullet{
+	Bullet_Info *b;
+    int p;//栈顶
+    int num;//结构体数组大小
+}myadt_bullet;
+
+//bool返回值 说明当前操作是否成功
+bool bulletary_init(myadt_bullet &adt,int user_num);//弹幕结构体数组动态分配内存空间 user_num数组大小
+Bullet_Info bullet_init(float x, float y, int belongs, float vx, float vy);//初始化弹幕结构体并返回
+bool bullet_insert(myadt_bullet &adt,Bullet_Info bullet);//插入弹幕
+bool bullet_delete(myadt_bullet &adt,int now);//删除弹幕 now是当前需要删除的位置
+void bullet_free(myadt_bullet &adt);//释放内存空间
 
 #endif
 
-//陈智霖 20220911
+//陈智霖 20220919
+/*
+叶财兴 20220919
+在Bullet_Info增加了vx, vy字段，并修改了初始化函数
+*/

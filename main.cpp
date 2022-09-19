@@ -1,14 +1,57 @@
 #include <windows.h>
+#include <stdio.h>
 #include "include/My_header.h"
 #include "include/BulletList.h"
 
+#define AMMO_MAX 10
 #define ID_TIMER_1 1
+//内部链接-仅作用于该源代码及其包含的头文件(即翻译单元)
+//弹幕变量
+static myadt_bullet Ammo;
 
-BulletList Blist_head, Bl_next;
+//人物消息
+static Charc_Info CharcInfo = {50, 1, 1, 10, 10};
 
+//其他参数
+static int bullet_cd = 5;
+static int bullet_cd_cnt = bullet_cd;
+static float steps = 0.2, time_lag, bullet_speed = 1.2;
+
+//外部链接-适用于多文件程序
 int cxClient = 1000, cyClient = 600;
 
-LRESULT CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM) ;
+
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+void GameMain();
+
+
+void GameMain()
+{
+    extern myadt_bullet Ammo;
+    extern Charc_Info CharcInfo;
+    extern int bullet_cd;
+    extern int bullet_cd_cnt;
+    extern int cxClient, cyClient;
+    extern float steps, time_lag;
+
+    if(GetAsyncKeyState('W'))CharcMove_y(CharcInfo, -steps*time_lag);
+    if(GetAsyncKeyState('A'))CharcMove_x(CharcInfo, -steps*time_lag);
+    if(GetAsyncKeyState('S'))CharcMove_y(CharcInfo, steps*time_lag);
+    if(GetAsyncKeyState('D'))CharcMove_x(CharcInfo, steps*time_lag);
+    if(bullet_cd_cnt < bullet_cd){
+        bullet_cd_cnt++;
+    }
+
+    for(int i = 0; i < Ammo.p; i++){
+        if(Ammo.b[i].x + Ammo.b[i].vx < cxClient && Ammo.b[i].y + Ammo.b[i].vy < cyClient && Ammo.b[i].x > 0 && Ammo.b[i].y > 0){
+            Ammo.b[i].x += (Ammo.b[i].vx*time_lag);
+            Ammo.b[i].y += (Ammo.b[i].vy*time_lag);
+        }
+        else{
+            bullet_delete(Ammo, i);
+        }
+    }
+}
 
 int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
                     PSTR szCmdLine, int iCmdShow)
@@ -18,6 +61,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
     MSG          msg ;
     WNDCLASS     wndclass ;
     LARGE_INTEGER fre, pre, next;
+    extern float time_lag;
 
     wndclass.style         = 0;//注意 窗口重设大小不会重绘
     wndclass.lpfnWndProc   = WndProc;//窗口过程为WndProc
@@ -47,29 +91,33 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
     ShowWindow (hwnd, iCmdShow) ;
     UpdateWindow (hwnd) ;
 
-    //DWORD tPre = GetTickCount();
-    //DWORD tNow = GetTickCount();
     QueryPerformanceFrequency(&fre);
     QueryPerformanceCounter(&pre);
+    Sleep(10);
+    QueryPerformanceCounter(&next);
 
-    BulletList_Init(Blist_head);
-    BulletList_Init(Bl_next);
+    timeBeginPeriod(1);
 
+    //游戏主循环
     while (msg.message != WM_QUIT)
     {
+        Sleep(1);
         if(PeekMessage(&msg, 0, NULL, NULL, PM_REMOVE)){
             TranslateMessage (&msg);
             DispatchMessage (&msg);
         }
+        GameMain();
         //tNow = GetTickCount();
-        QueryPerformanceCounter(&next);
-        if(((next.QuadPart - pre.QuadPart)*1000/fre.QuadPart) >= 16){//设定帧率为100
+        time_lag = (((next.QuadPart - pre.QuadPart)*1000.0)/fre.QuadPart);
+        {//固定帧率
             InvalidateRect(hwnd, NULL, FALSE);
             UpdateWindow(hwnd);
             pre = next;
         }
+        QueryPerformanceCounter(&next);
     }
-    return msg.wParam ;
+    return msg.wParam;
+
 }
 LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -79,9 +127,11 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     int cur_x, cur_y;
     static HBITMAP hBmp_character, hBmp_background, hBmp_character2, hBmp_bullet,
     hBmp_bullet2;
-    static int steps = 4, bullet_cd = 5;
+    extern float bullet_speed;
     static HINSTANCE hInstance;
-    static Charc_Info CharcInfo;
+    extern Charc_Info CharcInfo;
+    extern myadt_bullet Ammo;
+    extern int cxClient, cyClient, bullet_cd_cnt;
     RECT rect;
 
     switch (message)
@@ -93,42 +143,36 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         hBmp_character2 = LoadBitmap(hInstance, TEXT("character2"));
         hBmp_bullet = LoadBitmap(hInstance, TEXT("bullet"));
         hBmp_bullet2 = LoadBitmap(hInstance, TEXT("bullet2"));
-        SetTimer(hwnd, ID_TIMER_1, 10, NULL);
+        //SetTimer(hwnd, ID_TIMER_1, 10, NULL);
         CharcInfo.width = 64;
+        bulletary_init(Ammo, AMMO_MAX);
         return 0;
 
 //*
     case WM_LBUTTONDOWN:
         cur_x = LOWORD(lParam);
         cur_y = HIWORD(lParam);
-
-/*
-        if(bullet_cd == 5){//TEST FINISHIED LOOKS_OK
-            bullet_cd = 0;
-            BulletList new_node;
-            BulletList_Init(new_node);
-            new_node->x = CharcInfo.x;
-            new_node->y = CharcInfo.y;
-
-            new_node->v_x = new_node->vel * sinx(CharcInfo, cur_x, cur_y);
-            new_node->v_y = new_node->vel * cosx(CharcInfo, cur_x, cur_y);
-            BulletList_Insert(Blist_head, new_node);
+        if(bullet_cd_cnt == bullet_cd){//到cd才能发射
+            //printf("shoot!\n");
+            if(bullet_insert(Ammo, bullet_init(CharcInfo.x, CharcInfo.y, 0,
+                        (bullet_speed*cosx(cur_x, cur_y)), (bullet_speed*sinx(cur_x, cur_y))))){
+                //printf("Insert Success\n");
+                //printf("sinx=%f cosx=%f\n",sinx(cur_x, cur_y), cosx(cur_x, cur_y));
+            }
+            else{
+                //printf("Insert Failed\n");
+            }
+            bullet_cd_cnt = 0;
         }
-//*/
+
         return 0;
 
     case WM_RBUTTONDOWN:
 
         return 0;
 
-    case WM_TIMER:
-        if(GetAsyncKeyState('W'))CharcMove_y(CharcInfo, -steps);
-        if(GetAsyncKeyState('A'))CharcMove_x(CharcInfo, -steps);
-        if(GetAsyncKeyState('S'))CharcMove_y(CharcInfo, steps);
-        if(GetAsyncKeyState('D'))CharcMove_x(CharcInfo, steps);
-        if(bullet_cd < 5){
-            bullet_cd++;
-        }
+    case WM_TIMER://游戏主循环
+        //GameMain(Ammo);
         /*
         {
             if(!BulletList_IsEmpty(Blist_head)){
@@ -167,17 +211,15 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         StretchBlt(hdcBuf, cxClient/2, cyClient/2, CharcInfo.width, CharcInfo.width, hdcBmp, 0, 0, 64, 64, SRCPAINT);
         SelectObject(hdcBmp2, hBmp_bullet2);
         SelectObject(hdcBmp, hBmp_bullet);
-//*
-        {
-            if((Blist_head)){
-                TextOut(hdcBuf, 0, 0, TEXT("!NULL"), 5);
-            }
-            else
-                TextOut(hdcBuf, 0, 0, TEXT("NULL"), 4);
+        //printf("ammo.p=%d\n",Ammo.p);
+        for(int i = 0; i < Ammo.p; i++){
+            //printf("%d %d\n",cxClient/2 - CharcInfo.x + Ammo.b[i].x, cyClient/2 - CharcInfo.y + Ammo.b[i].y);
+            StretchBlt(hdcBuf, cxClient/2 - CharcInfo.x + Ammo.b[i].x, cyClient/2 - CharcInfo.y + Ammo.b[i].y, 15, 15, hdcBmp2, 0, 0, 15, 15, SRCAND);
+            StretchBlt(hdcBuf, cxClient/2 - CharcInfo.x + Ammo.b[i].x, cyClient/2 - CharcInfo.y + Ammo.b[i].y, 15, 15, hdcBmp, 0, 0, 15, 15, SRCPAINT);
         }
-//*/
-        //TextOut(hdcBuf, 0, 0, TEXT("???"), 3);
 
+
+        //将画布复制到屏幕
         BitBlt(hdc, 0, 0, cxClient, cyClient, hdcBuf, 0, 0, SRCCOPY);//将画布复制到屏幕上
         DeleteObject(hBmpBuf);
         DeleteDC(hdcBuf);
@@ -187,9 +229,10 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         return 0;
 
     case WM_DESTROY:
+        bullet_free(Ammo);
         DeleteObject(hBmp_character);
         DeleteObject(hBmp_background);
-        KillTimer(hwnd, ID_TIMER_1);
+        //KillTimer(hwnd, ID_TIMER_1);
         PostQuitMessage (0) ;
         return 0 ;
     }
