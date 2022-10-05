@@ -12,7 +12,7 @@ bool bulletary_init(myadt_bullet &adt,int user_num)
         return true;
     return false;
 }
-Bullet_Info bullet_init(float x, float y, int belongs, float vx, float vy)
+Bullet_Info bullet_init(float x, float y, int belongs, float vx, float vy, float damage)
 {
     Bullet_Info new_node;
     new_node.x = x;
@@ -20,17 +20,16 @@ Bullet_Info bullet_init(float x, float y, int belongs, float vx, float vy)
     new_node.belongs = belongs;
     new_node.vx = vx;
     new_node.vy = vy;
+    new_node.damage = damage;
 
     return new_node;
 }
 bool bullet_insert(myadt_bullet &adt,Bullet_Info bullet)
 {
-
     if(adt.p>=adt.num-1)
         return false;
     adt.b[adt.p++]=bullet;
     return true;
-
 }
 bool bullet_delete(myadt_bullet &adt,int now)
 {
