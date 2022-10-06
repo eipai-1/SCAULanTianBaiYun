@@ -50,3 +50,91 @@
 
 1664784989 d:\1\program\project\gameprojectv0.1\include\le.h
 
+1664784328 source:c:\users\administrator\desktop\game new\gameprojectv0.1\include\bulletlist.cpp
+	<stdlib.h>
+	<stdio.h>
+	"BulletList.h"
+
+1664784330 c:\users\administrator\desktop\game new\gameprojectv0.1\include\bulletlist.h
+
+1664785046 source:c:\users\administrator\desktop\game new\gameprojectv0.1\include\le.cpp
+	"le.h"
+	<stdlib.h>
+	<stdio.h>
+
+1665060330 c:\users\administrator\desktop\game new\gameprojectv0.1\include\le.h
+
+1664016044 source:c:\users\administrator\desktop\game new\gameprojectv0.1\include\resources.rc
+
+1665068777 source:c:\users\administrator\desktop\game new\gameprojectv0.1\include\chen.cpp
+	"le.h"
+	"chen.h"
+	<stdlib.h>
+	<math.h>
+
+1664973627 source:c:\users\administrator\desktop\game new\gameprojectv0.1\include\ycx_header.cpp
+	"Ycx_header.h"
+	<stdlib.h>
+	<stdio.h>
+	<cmath>
+
+1664973627 c:\users\administrator\desktop\game new\gameprojectv0.1\include\ycx_header.h
+	"le.h"
+
+1665068719 source:c:\users\administrator\desktop\game new\gameprojectv0.1\main.cpp
+	<windows.h>
+	<stdio.h>
+	<math.h>
+	"include/Ycx_header.h"
+	"include/BulletList.h"
+	"include/le.h"
+	"include/chen.h"
+
+1665059766 c:\users\administrator\desktop\game new\gameprojectv0.1\include\chen.h
+	"le.h"
+	"BulletList.h"
+
+1664784328 source:d:\1\program\project\game new\gameprojectv0.1\include\bulletlist.cpp
+	<stdlib.h>
+	<stdio.h>
+	"BulletList.h"
+
+1664784330 d:\1\program\project\game new\gameprojectv0.1\include\bulletlist.h
+
+1664785046 source:d:\1\program\project\game new\gameprojectv0.1\include\le.cpp
+	"le.h"
+	<stdlib.h>
+	<stdio.h>
+
+1665060330 d:\1\program\project\game new\gameprojectv0.1\include\le.h
+
+1664016044 source:d:\1\program\project\game new\gameprojectv0.1\include\resources.rc
+
+1664973627 source:d:\1\program\project\game new\gameprojectv0.1\include\ycx_header.cpp
+	"Ycx_header.h"
+	<stdlib.h>
+	<stdio.h>
+	<cmath>
+
+1664973627 d:\1\program\project\game new\gameprojectv0.1\include\ycx_header.h
+	"le.h"
+
+1665068719 source:d:\1\program\project\game new\gameprojectv0.1\main.cpp
+	<windows.h>
+	<stdio.h>
+	<math.h>
+	"include/Ycx_header.h"
+	"include/BulletList.h"
+	"include/le.h"
+	"include/chen.h"
+
+1665059766 d:\1\program\project\game new\gameprojectv0.1\include\chen.h
+	"le.h"
+	"BulletList.h"
+
+1665069288 source:d:\1\program\project\game new\gameprojectv0.1\include\chen.cpp
+	"le.h"
+	"chen.h"
+	<stdlib.h>
+	<math.h>
+

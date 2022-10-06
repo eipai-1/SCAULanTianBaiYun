@@ -41,6 +41,8 @@
 		<Unit filename="include/BulletList.h" />
 		<Unit filename="include/Ycx_header.cpp" />
 		<Unit filename="include/Ycx_header.h" />
+		<Unit filename="include/chen.cpp" />
+		<Unit filename="include/chen.h" />
 		<Unit filename="include/le.cpp" />
 		<Unit filename="include/le.h" />
 		<Unit filename="include/resources.rc">

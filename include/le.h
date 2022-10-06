@@ -13,6 +13,9 @@ typedef struct{
     float vx,vy;
     int hp_now, hp_max;
     int types,id;
+    float cnt;
+    int movemode;
+    float bullet_cnt;
 }Charc_Info,*PCharc_Info;
 
 typedef struct{

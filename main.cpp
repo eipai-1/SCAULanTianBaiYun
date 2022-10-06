@@ -4,6 +4,7 @@
 #include "include/Ycx_header.h"
 #include "include/BulletList.h"
 #include "include/le.h"
+#include "include/chen.h"
 
 #define ID_TIMER_1 1
 
@@ -26,8 +27,8 @@ static int cur_x, cur_y;//Êó±êÎ»ÖÃ
 
 //µ¯Ä»Ïà¹Ø²ÎÊý
 static const int AMMO_MAX = 10;//È«¾Ö×î´óµ¯Ä»Êý
-static myadt_bullet Ammo;//È«¾Öµ¯Ä»
-static float bullet_cd = 100, bullet_speed = 1.2;//µ¯Ä»cdÓëµ¯Ä»ÉäËÙ
+myadt_bullet Ammo;//È«¾Öµ¯Ä»
+float bullet_cd = 100, bullet_speed = 1.2;//µ¯Ä»cdÓëµ¯Ä»ÉäËÙ
 static float bullet_cd_cnt = bullet_cd;//µ¯Ä»cd¼ÆÊ±Æ÷
 //-----
 
@@ -36,10 +37,11 @@ static Charc_Info CharcInfo = Entity_Init(50, 1, 1, MAIN_CHARC_TYPE, 10);//Ö÷½ÇÐ
 static float steps = 0.3;//Ö÷½ÇÒÆ¶¯ËÙ¶È
 static const int ENTITY_MAX = 100;//×î´óÊµÌåÊý
 EntityAdt Global_entity;//È«¾ÖÊµÌå
-float Monster1_steps = 0.1, Monster1_bulletSpeed = 0.8, Monster1_movetime = 500;
-float Monster1_direction, Monster1_vx, Monster1_vy;
-float Monster1_movecnt = Monster1_movetime;
+float Monster1_steps = 0.1, Monster1_movetime = 500, Monster1_direction;
 int Monster1_movemode = 1;
+float Alert_range_squared = 9e4;
+float  Monster1_bullet_speed = 0.5;
+float Monster1_bullet_movetime = 100;
 //-----
 
 //ÆäËû²ÎÊý
@@ -153,7 +155,7 @@ void GameQuit()
 void GameEventLeftClick(int cur_x, int cur_y)
 {
     if(bullet_cd_cnt >= bullet_cd){//µ½cd²ÅÄÜ·¢Éä
-        if(bullet_insert(Ammo, bullet_init(CharcInfo.x, CharcInfo.y, 0,
+        if(bullet_insert(Ammo, bullet_init(CharcInfo.x, CharcInfo.y, MAIN_CHARC_BELONGS,
                     (bullet_speed*cosx(cur_x, cur_y)), (bullet_speed*sinx(cur_x, cur_y)), 10))){
         }
         bullet_cd_cnt = 0;
@@ -190,8 +192,16 @@ void BulletUpdate()
             break;
 
         case 3:
-            Global_entity.b[ret_id]->hp_now -= Ammo.b[i].damage;
-            bullet_delete(Ammo, i);
+            if(Ammo.b[i].belongs == MAIN_CHARC_BELONGS){
+                Global_entity.b[ret_id]->hp_now -= Ammo.b[i].damage;
+                bullet_delete(Ammo, i);
+            }
+            else if(Ammo.b[i].x + Ammo.b[i].vx < cxClient
+               && Ammo.b[i].y + Ammo.b[i].vy < cyClient
+               && Ammo.b[i].x > 0 && Ammo.b[i].y > 0){
+                Ammo.b[i].x += (Ammo.b[i].vx*time_lag);
+                Ammo.b[i].y += (Ammo.b[i].vy*time_lag);
+            }
             break;
         }
     }
@@ -248,7 +258,7 @@ void EntityUpdate()
                 Entity_delete(Global_entity, i);//É¾³ý²Ù×÷
             }
             else{
-                MonsterMoveType2(*Global_entity.b[i], CharcInfo, time_lag);
+                MonsterMoveType1(*Global_entity.b[i], CharcInfo, time_lag);
             }
         }
     }
@@ -256,6 +266,9 @@ void EntityUpdate()
 void EntityInit()
 {
     Entity_insert(Global_entity, Entity_Init_P(64, 100, 100, MONSTER_TYPE, 100));
+    Global_entity.b[Global_entity.p - 1]->cnt = 0;
+    Global_entity.b[Global_entity.p - 1]->movemode = MOVEMODE_SLEEP;
+    Global_entity.b[Global_entity.p - 1]->bullet_cnt = 0;
 }
 void EntityHpPaint(Charc_Info &s)
 {
@@ -318,7 +331,7 @@ int WINAPI WinMain (HINSTANCE hIns, HINSTANCE hPrevInstance, PSTR szCmdLine, int
 
     QueryPerformanceFrequency(&fre);
     QueryPerformanceCounter(&pre);
-    timeBeginPeriod(1);
+    //timeBeginPeriod(1);
     Sleep(5);
     QueryPerformanceCounter(&next);
 
@@ -340,7 +353,7 @@ int WINAPI WinMain (HINSTANCE hIns, HINSTANCE hPrevInstance, PSTR szCmdLine, int
         time_lag = (((next.QuadPart - pre.QuadPart)*1000.0)/fre.QuadPart);
     }
 
-    timeEndPeriod(1);
+    //timeEndPeriod(1);
     return msg.wParam;
 }
 LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
