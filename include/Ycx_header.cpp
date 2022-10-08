@@ -5,16 +5,15 @@
 
 extern EntityAdt Global_entity;
 extern int cxClient, cyClient;
-extern float Monster1_steps, Monster1_movecnt, Monster1_movetime, Monster1_direction;
-extern float Monster1_vx, Monster1_vy;
 static const float Pi = 2*acos(0.0);
-extern int Monster1_movemode;
-extern int Rad_of_gate;
+extern float Rad_of_gate, horCor_wid, horCor_lgh, verCor_wid, verCor_lgh;
 extern Map Game_map[MAP_SIZE][MAP_SIZE];
+extern float map_wall_width;
 
 void CharcMove(Charc_Info & s, float x, float y)
 {
-    if(s.x + x > 0 && s.y + y > 0 && s.x + s.width + x < cxClient && s.y + y + s.width < cyClient){
+    //if(s.x + x > 0 && s.y + y > 0 && s.x + s.width + x < cxClient && s.y + y + s.width < cyClient){
+    if(!MapEdgeDet(s.x+x, s.y+y, s.width)){
         if(!GlobalCollisionDet(Global_entity, s.x + x, s.y + y, s.width, s.id, NULL)){
             s.x += x;
             s.y += y;
@@ -57,53 +56,89 @@ void MapInit()
         }
     }
     Game_map[0][0].types = REWARD_MAPTYPE;
-    Game_map[0][1].types = CORRIDOR_MAPTYPE;
+    Game_map[0][0].left = 0;
+    Game_map[0][0].top = 0;
+    Game_map[0][0].right = 1;
+    Game_map[0][0].buttom = 1;
+
+    Game_map[0][1].types = CORRIDOR_HOR_MAPTYPE;
+
     Game_map[0][2].types = BATTLE_MAPTYPE;
-    Game_map[0][2].status = SLEEP_MAPSTATUS;
+    Game_map[0][2].status = BATTLING_MAPSTATUS;
+    Game_map[0][2].left = 1;
+    Game_map[0][2].top = 0;
+    Game_map[0][2].right = 0;
+    Game_map[0][2].buttom = 0;
+    /*
+    Game_map[1][0].types = CORRIDOR_VER_MAPTYPE;
+
+    Game_map[2][0].types = REWARD_MAPTYPE;
+    Game_map[2][0].left = 0;
+    Game_map[2][0].top = 1;
+    Game_map[2][0].right = 0;
+    Game_map[2][0].buttom = 0;
+    //*/
 }
 
 int MapEdgeDet(float x, float y, int wid)//返回1时表示碰撞 0表示无碰撞
 {
+    if(x < 0 || y < 0)return 1;
+
+    bool flag = true;
     int x_map = (int)x/1000, y_map = (int)y/600;
-    switch(Game_map[x_map][y_map].types){
+
+    switch(Game_map[y_map][x_map].types){
     case REWARD_MAPTYPE:
-        if(y < 0 || x < 0)return 1;
-        else{
-            if((x < cxClient*x_map && x + wid < cxClient*x_map + cxClient/2 - Rad_of_gate)
-               || (x > cxClient*x_map + cxClient/2 + Rad_of_gate && x + wid < cxClient*(x_map+1))){
-                if(y + wid >= cyClient*(y_map+1))
-                    return 1;
-                return 0;
+        if(x > cxClient*x_map + cxClient/2 - Rad_of_gate
+           && x + wid < cxClient*x_map + cxClient/2 + Rad_of_gate){
+            //printf("case1\n");
+            if(y < cyClient*y_map + map_wall_width &&
+               (!Game_map[y_map][x_map].top || y_map == 0)){
+                return 1;
             }
+            else if(y + wid > cyClient*(y_map + 1) - map_wall_width
+                    && !Game_map[y_map][x_map].buttom){
+                return 1;
+            }
+            flag = false;
         }
+
+        if(y > cyClient*y_map + cyClient/2 - Rad_of_gate
+           && y + wid < cyClient*y_map + cyClient/2 + Rad_of_gate){
+            if(x < cxClient*x_map + map_wall_width &&
+               (!Game_map[y_map][x_map].left || x_map == 0)){
+                return 1;
+            }
+            else if(x + wid > cxClient*(x_map + 1) - map_wall_width
+                    && !Game_map[y_map][x_map].right){
+                return 1;
+            }
+            flag = false;
+        }
+
+        if(flag){
+            if(x + wid > cxClient*(x_map+1) - map_wall_width
+               || x < cxClient*x_map + map_wall_width
+               || y + wid > cyClient*(y_map+1) - map_wall_width
+               || y < cyClient*y_map + map_wall_width){
+                   return 1;
+               }
+        }
+        return 0;
+
+    case CORRIDOR_HOR_MAPTYPE:
+        if(y + wid < cyClient*y_map + cyClient/2 + horCor_wid/2 - map_wall_width
+           && y > cyClient*y_map + cyClient/2 - horCor_wid/2 + map_wall_width)
+            return 0;
+        return 1;
+        break;
+
+    case CORRIDOR_VER_MAPTYPE:
+        if(x + wid < cxClient*x_map + cxClient/2 + verCor_wid/2 - map_wall_width
+           && x > cxClient*x_map + cxClient/2 - verCor_wid/2 + map_wall_width)
+            return 0;
+        return 1;
         break;
     }
-}
-
-void MonsterMoveType2(Charc_Info &Monster, Charc_Info main_char, float time_lag)
-{
-    float x = Monster.vx * time_lag, y = Monster.vy * time_lag;
-    if(Monster1_movecnt < Monster1_movetime){
-        Monster1_movecnt += time_lag;
-        if(!GlobalCollisionDet(Global_entity, Monster.x + x,
-            Monster.y + y, Monster.width, Monster.id, NULL)
-            && Monster.x + x > 0 && Monster.y + y> 0
-            && Monster.x + Monster.width + x < cxClient
-            && Monster.y + Monster.width + y < cyClient){
-                Monster.x += x;
-                Monster.y += y;
-            }
-    }
-    else{
-        Monster1_movecnt = 0;
-        srand((int)(time_lag*1000));
-        Monster1_direction = (rand()%1000)/500.0*Pi;
-        //printf("NewDIr=%f\n", Monster1_direction);
-        Monster.vx = cos(Monster1_direction) * Monster1_steps;
-        Monster.vy = sin(Monster1_direction) * Monster1_steps;
-
-        //加上玩家方向的矢量
-        Monster.vx += cos_x(Monster.x, Monster.y, main_char.x, main_char.y) * Monster1_steps;
-        Monster.vy += sin_x(Monster.x, Monster.y, main_char.x, main_char.y) * Monster1_steps;
-    }
+    return 0;
 }

@@ -63,8 +63,7 @@ void Entity_free(EntityAdt &adt)
 
 int GlobalCollisionDet(EntityAdt &Det, float x, float y, int wid, int id, int *ret_id)
 {
-    for(int i=0;i<Det.p;i++)
-    {
+    for(int i=0;i<Det.p;i++)          {
         //id相同表示同一实体，不用判断
         if(id != Det.b[i]->id){
             /*

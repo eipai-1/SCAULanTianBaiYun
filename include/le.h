@@ -1,12 +1,11 @@
 #ifndef LE_H_
 #define LE_H_
 
-/*
-#define MAIN_CHARC_TYPE 0
 #define OBSTACLE_TYPE 1
 #define OBSTACLE_UNBREAKABLE_TYPE 2
 #define MONSTER_TYPE 3
-*/
+#define MAIN_CHARC_TYPE 4
+
 typedef struct{
     int width = 50;
     float x, y;

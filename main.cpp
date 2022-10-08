@@ -6,12 +6,7 @@
 #include "include/le.h"
 #include "include/chen.h"
 
-#define ID_TIMER_1 1
 
-#define OBSTACLE_TYPE 1
-#define OBSTACLE_UNBREAKABLE_TYPE 2
-#define MONSTER_TYPE 3
-#define MAIN_CHARC_TYPE 4
 
 /*-----游戏相关参数-----*/
 //游戏引擎相关参数
@@ -25,6 +20,14 @@ static HDC hdc, hdcBmp, hdcBuf, hdcBmp2;//游戏所有的设备环境句柄
 static int cur_x, cur_y;//鼠标位置
 //-----
 
+//地图相关参数
+Map Game_map[MAP_SIZE][MAP_SIZE];
+float map_wall_width = 2;
+float Rad_of_gate = 40, horCor_wid = 80, horCor_lgh = cxClient,
+verCor_wid = 80, verCor_lgh = cyClient;
+int x_map, y_map;
+//-----
+
 //弹幕相关参数
 static const int AMMO_MAX = 10;//全局最大弹幕数
 myadt_bullet Ammo;//全局弹幕
@@ -33,7 +36,7 @@ static float bullet_cd_cnt = bullet_cd;//弹幕cd计时器
 //-----
 
 //实体相关参数
-static Charc_Info CharcInfo = Entity_Init(50, 1, 1, MAIN_CHARC_TYPE, 10);//主角信息
+static Charc_Info CharcInfo = Entity_Init(50, cxClient/2, cyClient/2, MAIN_CHARC_TYPE, 10);//主角信息
 static float steps = 0.3;//主角移动速度
 static const int ENTITY_MAX = 100;//最大实体数
 EntityAdt Global_entity;//全局实体
@@ -41,7 +44,7 @@ float Monster1_steps = 0.1, Monster1_movetime = 500, Monster1_direction;
 int Monster1_movemode = 1;
 float Alert_range_squared = 9e4;
 float  Monster1_bullet_speed = 0.5;
-float Monster1_bullet_movetime = 100;
+float Monster1_bullet_movetime = 1000;
 //-----
 
 //其他参数
@@ -49,6 +52,7 @@ static int rnd_flag = 1;
 static float rnd_num;
 const float Pi = 2*acos(0.0);
 //-----
+
 
 
 /*-----游戏主要函数声明-----*/
@@ -59,6 +63,10 @@ void GameInit();
 void GamePaint(HWND);
 void GameQuit();
 void GameEventLeftClick(int cur_x, int cur_y);
+//-----
+
+//地图相关函数声明
+void MapPaint();
 //-----
 
 //弹幕函数声明
@@ -76,6 +84,7 @@ void EntityHpPaint();
 //其他函数声明
 void RndPaint();
 //-----
+
 
 
 /*-----游戏主要函数定义-----*/
@@ -104,6 +113,7 @@ void GameInit()
     Entity_insert(Global_entity, &CharcInfo);
 
     EntityInit();
+    MapInit();
 }
 void GamePaint(HWND hwnd)
 {
@@ -122,8 +132,9 @@ void GamePaint(HWND hwnd)
     FillRect(hdcBuf, &rect, WHITE_BRUSH);
 
     //加载背景
-    SelectObject(hdcBmp, hBmp_background);
-    StretchBlt(hdcBuf, cxClient/2 - CharcInfo.x, cyClient/2 - CharcInfo.y, cxClient, cyClient, hdcBmp, 0, 0, 100, 100, SRCCOPY);
+    MapPaint();
+    //SelectObject(hdcBmp, hBmp_background);
+    //StretchBlt(hdcBuf, 0 + cxClient/2 - CharcInfo.x, 0 + cyClient/2 - CharcInfo.y, cxClient, cyClient, hdcBmp, 0, 0, 100, 100, SRCCOPY);
 
     SelectObject(hdcBmp2, hBmp_character2);
     StretchBlt(hdcBuf, cxClient/2, cyClient/2, CharcInfo.width, CharcInfo.width, hdcBmp2, 0, 0, 64, 64, SRCAND);
@@ -159,6 +170,49 @@ void GameEventLeftClick(int cur_x, int cur_y)
                     (bullet_speed*cosx(cur_x, cur_y)), (bullet_speed*sinx(cur_x, cur_y)), 10))){
         }
         bullet_cd_cnt = 0;
+    }
+}
+//-----
+
+//地图相关函数定义
+void MapPaint()
+{
+    x_map = CharcInfo.x/cxClient, y_map = CharcInfo.y/cyClient;
+    float tempx, tempy;
+
+    SelectObject(hdcBmp, hBmp_background);
+    for(int i = 0; i < MAP_SIZE; i++){
+        for(int j = 0; j < MAP_SIZE; j++){
+            switch(Game_map[i][j].types){
+            case NULL_MAPTYPE:
+                break;
+
+            case CORRIDOR_HOR_MAPTYPE:
+                tempx = j*cxClient + cxClient/2 - CharcInfo.x;
+                tempy = i*cyClient + cyClient/2 - CharcInfo.y + (cyClient/2 - horCor_wid/2);
+                //printf("%lf %lf\n", tempx, tempy);
+                StretchBlt(hdcBuf, tempx,
+                           tempy,
+                           horCor_lgh, horCor_wid, hdcBmp, 0, 0, 100, 100, SRCCOPY);
+                break;
+
+            case CORRIDOR_VER_MAPTYPE:
+                tempx = j*cxClient + cxClient/2 - CharcInfo.x + (cxClient/2 - verCor_wid/2);
+                tempy = i*cyClient + cyClient/2 - CharcInfo.y;
+                //printf("%lf %lf\n", tempx, tempy);
+                StretchBlt(hdcBuf, tempx,
+                           tempy,
+                           verCor_wid, verCor_lgh, hdcBmp, 0, 0, 100, 100, SRCCOPY);
+                break;
+
+            case BATTLE_MAPTYPE:
+            case REWARD_MAPTYPE:
+                StretchBlt(hdcBuf, j*cxClient + cxClient/2 - CharcInfo.x,
+                           i*cyClient + cyClient/2 - CharcInfo.y,
+                           cxClient, cyClient, hdcBmp, 0, 0, 100, 100, SRCCOPY);
+                break;
+            }
+        }
     }
 }
 //-----
@@ -331,8 +385,7 @@ int WINAPI WinMain (HINSTANCE hIns, HINSTANCE hPrevInstance, PSTR szCmdLine, int
 
     QueryPerformanceFrequency(&fre);
     QueryPerformanceCounter(&pre);
-    //timeBeginPeriod(1);
-    Sleep(5);
+    Sleep(1);
     QueryPerformanceCounter(&next);
 
     //游戏主循环
@@ -353,7 +406,6 @@ int WINAPI WinMain (HINSTANCE hIns, HINSTANCE hPrevInstance, PSTR szCmdLine, int
         time_lag = (((next.QuadPart - pre.QuadPart)*1000.0)/fre.QuadPart);
     }
 
-    //timeEndPeriod(1);
     return msg.wParam;
 }
 LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -378,17 +430,6 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         cur_x = LOWORD(lParam);
         cur_y = HIWORD(lParam);
         EntityInit();
-        /*
-        //temp_charcInfo = ;
-        if(Entity_insert(Global_entity, Entity_Init_P(20,
-                    cur_x + CharcInfo.x - cxClient/2,
-                    cur_y + CharcInfo.y - cyClient/2, OBSTACLE_UNBREAKABLE_TYPE, 0))){
-            //printf("INSERT SUCCESS\n");
-        }
-        else{
-            //printf("INSERT ERROR\n");
-        }
-        */
         return 0;
 
     case WM_PAINT:
