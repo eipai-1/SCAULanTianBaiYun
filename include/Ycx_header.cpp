@@ -59,7 +59,7 @@ void MapInit()
     Game_map[0][0].left = 0;
     Game_map[0][0].top = 0;
     Game_map[0][0].right = 1;
-    Game_map[0][0].buttom = 1;
+    Game_map[0][0].buttom = 0;
 
     Game_map[0][1].types = CORRIDOR_HOR_MAPTYPE;
 
@@ -85,9 +85,10 @@ int MapEdgeDet(float x, float y, int wid)//返回1时表示碰撞 0表示无碰撞
     if(x < 0 || y < 0)return 1;
 
     bool flag = true;
-    int x_map = (int)x/1000, y_map = (int)y/600;
+    int x_map = (int)(x/1000), y_map = (int)(y/600);
 
     switch(Game_map[y_map][x_map].types){
+    case BATTLE_MAPTYPE:
     case REWARD_MAPTYPE:
         if(x > cxClient*x_map + cxClient/2 - Rad_of_gate
            && x + wid < cxClient*x_map + cxClient/2 + Rad_of_gate){
@@ -124,7 +125,7 @@ int MapEdgeDet(float x, float y, int wid)//返回1时表示碰撞 0表示无碰撞
                    return 1;
                }
         }
-        return 0;
+        break;
 
     case CORRIDOR_HOR_MAPTYPE:
         if(y + wid < cyClient*y_map + cyClient/2 + horCor_wid/2 - map_wall_width

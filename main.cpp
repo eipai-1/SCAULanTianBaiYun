@@ -225,13 +225,11 @@ void BulletUpdate()
         bullet_cd_cnt += time_lag;
     }
     for(int i = 0; i < Ammo.p; i++){
-        Col_id = GlobalCollisionDet(Global_entity, Ammo.b[i].x + Ammo.b[i].vx, Ammo.b[i].y + Ammo.b[i].vy, 15, -1, &ret_id);
+        Col_id = GlobalCollisionDet(Global_entity, Ammo.b[i].x + Ammo.b[i].vx*time_lag, Ammo.b[i].y + Ammo.b[i].vy*time_lag, 15, -1, &ret_id);
         switch(Col_id){
         case 0:
         case 4:
-            if(Ammo.b[i].x + Ammo.b[i].vx < cxClient
-               && Ammo.b[i].y + Ammo.b[i].vy < cyClient
-               && Ammo.b[i].x > 0 && Ammo.b[i].y > 0){
+            if(!MapEdgeDet(Ammo.b[i].x + Ammo.b[i].vx*time_lag, Ammo.b[i].y + Ammo.b[i].vy*time_lag, 10)){
                 Ammo.b[i].x += (Ammo.b[i].vx*time_lag);
                 Ammo.b[i].y += (Ammo.b[i].vy*time_lag);
             }
@@ -387,11 +385,12 @@ int WINAPI WinMain (HINSTANCE hIns, HINSTANCE hPrevInstance, PSTR szCmdLine, int
     QueryPerformanceCounter(&pre);
     Sleep(1);
     QueryPerformanceCounter(&next);
+    timeBeginPeriod(1);
 
     //ÓÎÏ·Ö÷Ñ­»·
     while (msg.message != WM_QUIT)
     {
-        //Sleep(20);
+        //Sleep(40);
         if(PeekMessage(&msg, 0, NULL, NULL, PM_REMOVE)){
             TranslateMessage (&msg);
             DispatchMessage (&msg);

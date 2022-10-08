@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1665234183 source:d:\1\program\project\gameprojectv0.1\main.cpp
+1665247167 source:d:\1\program\project\gameprojectv0.1\main.cpp
 	<windows.h>
 	<stdio.h>
 	<math.h>
@@ -35,21 +35,21 @@
 
 1664784330 d:\1\program\project\gameprojectv0.1\include\bulletlist.h
 
-1665155352 source:d:\1\program\project\gameprojectv0.1\include\ycx_header.cpp
+1665247255 source:d:\1\program\project\gameprojectv0.1\include\ycx_header.cpp
 	"Ycx_header.h"
 	<stdlib.h>
 	<stdio.h>
 	<cmath>
 
-1665154419 d:\1\program\project\gameprojectv0.1\include\ycx_header.h
+1665242499 d:\1\program\project\gameprojectv0.1\include\ycx_header.h
 	"le.h"
 
-1665235731 source:d:\1\program\project\gameprojectv0.1\include\le.cpp
+1665242499 source:d:\1\program\project\gameprojectv0.1\include\le.cpp
 	"le.h"
 	<stdlib.h>
 	<stdio.h>
 
-1665073531 d:\1\program\project\gameprojectv0.1\include\le.h
+1665246265 d:\1\program\project\gameprojectv0.1\include\le.h
 
 1664784328 source:c:\users\administrator\desktop\game new\gameprojectv0.1\include\bulletlist.cpp
 	<stdlib.h>
