@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1665247167 source:d:\1\program\project\gameprojectv0.1\main.cpp
+1665665028 source:d:\1\program\project\gameprojectv0.1\main.cpp
 	<windows.h>
 	<stdio.h>
 	<math.h>
@@ -28,28 +28,29 @@
 	"My_header.h"
 	<cmath>
 
-1664784328 source:d:\1\program\project\gameprojectv0.1\include\bulletlist.cpp
+1665660941 source:d:\1\program\project\gameprojectv0.1\include\bulletlist.cpp
 	<stdlib.h>
 	<stdio.h>
 	"BulletList.h"
 
 1664784330 d:\1\program\project\gameprojectv0.1\include\bulletlist.h
 
-1665247255 source:d:\1\program\project\gameprojectv0.1\include\ycx_header.cpp
+1665665324 source:d:\1\program\project\gameprojectv0.1\include\ycx_header.cpp
 	"Ycx_header.h"
 	<stdlib.h>
 	<stdio.h>
 	<cmath>
 
-1665242499 d:\1\program\project\gameprojectv0.1\include\ycx_header.h
+1665664402 d:\1\program\project\gameprojectv0.1\include\ycx_header.h
 	"le.h"
+	"chen.h"
 
 1665242499 source:d:\1\program\project\gameprojectv0.1\include\le.cpp
 	"le.h"
 	<stdlib.h>
 	<stdio.h>
 
-1665246265 d:\1\program\project\gameprojectv0.1\include\le.h
+1665503145 d:\1\program\project\gameprojectv0.1\include\le.h
 
 1664784328 source:c:\users\administrator\desktop\game new\gameprojectv0.1\include\bulletlist.cpp
 	<stdlib.h>
@@ -139,10 +140,12 @@
 	<stdlib.h>
 	<math.h>
 
-1665069498 source:d:\1\program\project\gameprojectv0.1\include\chen.cpp
+1665501649 source:d:\1\program\project\gameprojectv0.1\include\chen.cpp
 	"le.h"
 	"chen.h"
+	"Ycx_header.h"
 	<stdlib.h>
+	<stdio.h>
 	<math.h>
 
 1665059766 d:\1\program\project\gameprojectv0.1\include\chen.h

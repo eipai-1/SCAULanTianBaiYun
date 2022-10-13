@@ -2,89 +2,88 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="include\le.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
+	<File name="include\le.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2705" topLine="0" />
+			<Cursor1 position="871" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3063" topLine="184" />
 		</Cursor>
 		<Folding>
-			<Collapse line="5" />
-			<Collapse line="16" />
-			<Collapse line="27" />
-			<Collapse line="37" />
-			<Collapse line="46" />
-			<Collapse line="58" />
-			<Collapse line="64" />
-			<Collapse line="93" />
+			<Collapse line="249" />
+			<Collapse line="291" />
+			<Collapse line="342" />
+			<Collapse line="395" />
+			<Collapse line="407" />
+			<Collapse line="442" />
+			<Collapse line="460" />
+			<Collapse line="467" />
+			<Collapse line="500" />
+			<Collapse line="519" />
+			<Collapse line="534" />
+			<Collapse line="598" />
 		</Folding>
 	</File>
 	<File name="include\chen.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2933" topLine="0" />
+			<Cursor1 position="3163" topLine="55" />
 		</Cursor>
 	</File>
 	<File name="include\BulletList.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="867" topLine="0" />
+			<Cursor1 position="960" topLine="0" />
 		</Cursor>
+		<Folding>
+			<Collapse line="5" />
+			<Collapse line="14" />
+			<Collapse line="26" />
+			<Collapse line="33" />
+			<Collapse line="40" />
+		</Folding>
 	</File>
-	<File name="include\BulletList.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
+	<File name="include\le.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="571" topLine="2" />
+			<Cursor1 position="293" topLine="33" />
+		</Cursor>
+		<Folding>
+			<Collapse line="64" />
+			<Collapse line="93" />
+		</Folding>
+	</File>
+	<File name="include\chen.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="212" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="include\Ycx_header.cpp" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2985" topLine="45" />
+			<Cursor1 position="3017" topLine="83" />
 		</Cursor>
 		<Folding>
-			<Collapse line="23" />
-			<Collapse line="28" />
-			<Collapse line="33" />
-			<Collapse line="38" />
-			<Collapse line="43" />
-			<Collapse line="49" />
+			<Collapse line="27" />
+			<Collapse line="32" />
+			<Collapse line="37" />
+			<Collapse line="42" />
+			<Collapse line="47" />
+			<Collapse line="53" />
+			<Collapse line="91" />
 		</Folding>
+	</File>
+	<File name="include\Ycx_header.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="7" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="298" topLine="23" />
+		</Cursor>
 	</File>
 	<File name="include\resources.rc" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="5" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="306" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="include\chen.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
+	<File name="include\BulletList.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="419" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1793" topLine="83" />
-		</Cursor>
-		<Folding>
-			<Collapse line="93" />
-			<Collapse line="102" />
-			<Collapse line="119" />
-			<Collapse line="160" />
-			<Collapse line="167" />
-			<Collapse line="179" />
-			<Collapse line="222" />
-			<Collapse line="267" />
-			<Collapse line="279" />
-			<Collapse line="311" />
-			<Collapse line="324" />
-			<Collapse line="331" />
-			<Collapse line="337" />
-			<Collapse line="352" />
-			<Collapse line="415" />
-		</Folding>
-	</File>
-	<File name="include\le.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="58" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include\Ycx_header.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="6" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="724" topLine="3" />
+			<Cursor1 position="628" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

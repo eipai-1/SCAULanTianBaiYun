@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include "BulletList.h"
 
-
 bool bulletary_init(myadt_bullet &adt,int user_num)
 {
     adt.num=user_num;
@@ -42,5 +41,7 @@ void bullet_free(myadt_bullet &adt)
 {
     free(adt.b);
 }
+
+
 
 //³ÂÖÇÁØ 20220919

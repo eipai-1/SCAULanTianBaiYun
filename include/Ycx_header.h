@@ -1,6 +1,8 @@
 #ifndef MY_HEADER_H_
 #define MY_HEADER_H_
+
 #include "le.h"
+#include "chen.h"
 
 #define MAP_SIZE 4
 
@@ -14,6 +16,14 @@
 #define CORRIDOR_HOR_MAPTYPE 3  //走廊房间 横
 #define CORRIDOR_VER_MAPTYPE 4  //走廊房间 竖
 
+#define SHABBY_PISTOL_WEAPON 1
+#define PREDATOR_PISTOL_WEAPON 2
+#define SHOTGUN_WEAPON 3
+
+#define START_GAMESTATUS 0
+#define BATTLING_GAMESTATUS 1
+#define RUNNING_GAMESTATUS 2
+
 typedef struct{
     int status;
     int types;
@@ -21,11 +31,19 @@ typedef struct{
     EntityAdt entity;
 }Map;
 
+typedef struct{
+    float damage;
+    float bullet_cd;
+    int types;
+}Weapon;
+
 void CharcMove(Charc_Info & s, float x, float y);//人物移动 x轴
 
 double sinx(int cur_x, int cur_y);
 double cosx(int cur_x, int cur_y);
 int GetRnd(int seeds);
+
+Weapon WeaponInit(float damage, float bullet_cd, int types);
 
 void MapInit();
 int MapEdgeDet(float x, float y, int wid);//返回1时表示碰撞 0表示无碰撞

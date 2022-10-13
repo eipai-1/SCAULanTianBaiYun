@@ -1,6 +1,8 @@
 #include "le.h"
 #include "chen.h"
+#include "Ycx_header.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 
 extern EntityAdt Global_entity;
@@ -21,14 +23,13 @@ void MonsterMoveType1(Charc_Info &Monster, Charc_Info main_char, float time_lag)
         if(Monster.cnt < Monster1_movetime)
         {
             Monster.cnt += time_lag;
+            int Col_id = GlobalCollisionDet(Global_entity, Monster.x + x,
+                                       Monster.y + y, Monster.width, Monster.id, NULL);
             switch(Monster.movemode)
             {
             case MOVEMODE_SHIFT://ÒÆ¶¯
-                if(!GlobalCollisionDet(Global_entity, Monster.x + x,
-                                       Monster.y + y, Monster.width, Monster.id, NULL)
-                        && Monster.x + x > 0 && Monster.y + y> 0
-                        && Monster.x + Monster.width + x < cxClient
-                        && Monster.y + Monster.width + y < cyClient)
+                if((Col_id == NO_COLLSION_TYPE)
+                   && !MapEdgeDet(Monster.x + x, Monster.y + y, Monster.width))
                 {
                     Monster.x += x;
                     Monster.y += y;
@@ -40,6 +41,7 @@ void MonsterMoveType1(Charc_Info &Monster, Charc_Info main_char, float time_lag)
             }
             if(Monster.bullet_cnt > Monster1_bullet_movetime)
             {
+                printf("1\n");
                 bullet_insert(Ammo, bullet_init(Monster.x, Monster.y, MONSTER_BELONGS,
                                                 cos_x(Monster.x, Monster.y, main_char.x, main_char.y) * Monster1_bullet_speed,
                                                 sin_x(Monster.x, Monster.y, main_char.x, main_char.y) * Monster1_bullet_speed,
