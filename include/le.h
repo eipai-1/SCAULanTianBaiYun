@@ -7,12 +7,15 @@
 #define MONSTER_TYPE 3
 #define MAIN_CHARC_TYPE 4
 #define MONSTER2_TYPE 5
+#define TELEPORT_TYPE 6
+#define CUREDROP_TYPE 7
+#define TIMEDROP_TYPE 8
 
 typedef struct{
     int width = 50;
     float x, y;
     float vx,vy;
-    int hp_now, hp_max;
+    float hp_now, hp_max;
     int types,id;
     float cnt;
     int movemode;

@@ -7,6 +7,7 @@ typedef struct Bullet_Info{
 	float vx, vy;
 	int belongs;
 	float damage;
+	int pre_id = -1;
 }Bullet_Info, *BulletList;
 
 //

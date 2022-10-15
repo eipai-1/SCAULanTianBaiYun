@@ -6,7 +6,7 @@
 #include <math.h>
 
 extern EntityAdt Global_entity;
-extern int cxClient, cyClient;
+extern int cxClient, cyClient, Map_depth_now;
 extern float Monster1_steps, Monster1_movetime, Monster1_direction;
 static const float Pi = 2*acos(0.0);
 extern float Alert_range_squared;
@@ -29,7 +29,7 @@ void MonsterMoveType1(Charc_Info &Monster, Charc_Info main_char, float time_lag)
             {
             case MOVEMODE_SHIFT://ÒÆ¶¯
                 if((Col_id == NO_COLLSION_TYPE)
-                   && !MapEdgeDet(Monster.x + x, Monster.y + y, Monster.width))
+                   && !MapEdgeDet(Map_depth_now, Monster.x + x, Monster.y + y, Monster.width))
                 {
                     Monster.x += x;
                     Monster.y += y;
@@ -41,7 +41,7 @@ void MonsterMoveType1(Charc_Info &Monster, Charc_Info main_char, float time_lag)
             }
             if(Monster.bullet_cnt > Monster1_bullet_movetime)
             {
-                printf("1\n");
+                //printf("1\n");
                 bullet_insert(Ammo, bullet_init(Monster.x, Monster.y, MONSTER_BELONGS,
                                                 cos_x(Monster.x, Monster.y, main_char.x, main_char.y) * Monster1_bullet_speed,
                                                 sin_x(Monster.x, Monster.y, main_char.x, main_char.y) * Monster1_bullet_speed,
