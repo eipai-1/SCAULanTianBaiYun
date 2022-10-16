@@ -5,15 +5,13 @@
 
 extern EntityAdt Global_entity;
 extern int cxClient, cyClient, Monster1_wid, Game_status, map_temp_left,
-map_temp_top, map_temp_right, map_temp_buttom, Map_depth_now;
+map_temp_top, map_temp_right, map_temp_buttom, Map_depth_now, Map_rooms_to_clear[MAP_DEPTH];
 const int ENTITY_MAX = 100;
 //static const float Pi = 2*acos(0.0);
 extern float Rad_of_gate, horCor_wid, horCor_lgh, verCor_wid, verCor_lgh, time_lag,
 map_wall_width;
 extern Map Game_map[MAP_DEPTH][MAP_SIZE][MAP_SIZE];
 int LockDoorCnt = 0;
-
-//int LockDoorCnt = 0, LockDoorTime = 10;
 
 void CharcMove(Charc_Info & s, float x, float y)
 {
@@ -27,13 +25,16 @@ void CharcMove(Charc_Info & s, float x, float y)
             temp_x = s.x/cxClient, temp_y = s.y/cyClient;
             //printf("%d %d %d %d\n", Game_map[temp_y][temp_x].left, Game_map[temp_y][temp_x].top,
             //       Game_map[temp_y][temp_x].right, Game_map[temp_y][temp_x].buttom);
+            //printf("%d %d %d\n",Map_depth_now, temp_x, temp_y);
             if(Game_status == RUNNING_GAMESTATUS
                && Game_map[Map_depth_now][temp_y][temp_x].status == BATTLING_MAPSTATUS){
+                //printf("1\n");
                 if(LockDoorCnt < 4){
                     LockDoorCnt++;
                 }
                 else{
                     if(LockDoorCnt)LockDoorCnt = 0;
+                    //printf("switch\n");
                     Game_status = BATTLING_GAMESTATUS;
                     map_temp_left = Game_map[Map_depth_now][temp_y][temp_x].left;
                     map_temp_top = Game_map[Map_depth_now][temp_y][temp_x].top;
@@ -76,16 +77,48 @@ int GetRnd(int seeds)
     return rand();
 }
 
-void Monster1_Insert(EntityAdt &entity, PCharc_Info p_charc)
+void Monster_Insert(EntityAdt &entity, PCharc_Info p_charc)
 {
     Entity_insert(entity, p_charc);
-    entity.b[entity.p - 1]->cnt = 0;
-    entity.b[entity.p - 1]->movemode = MOVEMODE_SLEEP;
-    entity.b[entity.p - 1]->bullet_cnt = 0;
+    switch(p_charc->types){
+    case MONSTER_TYPE:
+    case MONSTER2_TYPE:
+        entity.b[entity.p - 1]->cnt = 0;
+        entity.b[entity.p - 1]->movemode = MOVEMODE_SLEEP;
+        entity.b[entity.p - 1]->bullet_cnt = 0;
+        break;
+
+    case BOSS_MONSTER_TYPE:
+        entity.b[entity.p - 1]->boss_summon = 1;
+        entity.b[entity.p - 1]->cnt = 0;
+        entity.b[entity.p - 1]->movemode = MOVEMODE_SLEEP;
+        entity.b[entity.p - 1]->bullet_cnt = 0;
+        entity.b[entity.p - 1]->vx = entity.b[entity.p - 1]->vy = 1.5;
+        break;
+    }
+/*
+    switch(p_charc->types){
+    case MONSTER_TYPE:
+    case MONSTER2_TYPE:
+        entity.b[entity.p - 1]->cnt = 0;
+        entity.b[entity.p - 1]->movemode = MOVEMODE_SLEEP;
+        entity.b[entity.p - 1]->bullet_cnt = 0;
+        break;
+    case BOSS_MONSTER_TYPE:
+        entity.b[entity.p - 1]->cnt = 0;
+        entity.b[entity.p - 1]->movemode = MOVEMODE_SLEEP;
+        entity.b[entity.p - 1]->bullet_cnt = 0;
+        entity.b[entity.p - 1]->boss_summon = 1;
+        break;
+    }
+    Entity_insert(entity, p_charc);
+    */
 }
 
 void MapInit()
 {
+    //d = 1
+    Map_rooms_to_clear[0] = 1;
     Game_map[0][0][0].left = 0;
     Game_map[0][0][0].top = 0;
     Game_map[0][0][0].right = 1;
@@ -97,16 +130,30 @@ void MapInit()
 
     Game_map[0][0][2].left = 1;
     Game_map[0][0][2].top = 0;
-    Game_map[0][0][2].right = 0;
+    Game_map[0][0][2].right = 1;
     Game_map[0][0][2].buttom = 0;
-    Game_map[0][0][2].types = REWARD_MAPTYPE;
+    Game_map[0][0][2].types = BATTLE_MAPTYPE;
+    Game_map[0][0][2].status = BATTLING_MAPSTATUS;
     EntityAry_init(Game_map[0][0][2].entity, ENTITY_MAX);
-    Entity_insert(Game_map[0][0][2].entity, Entity_Init_P(150, cxClient*2 + 125, cyClient/2 - 75, TELEPORT_TYPE, 100));
+    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(64, cxClient*2 + cxClient/2 - 25, cyClient/2 - 25, MONSTER_TYPE, 100));
 
+    Game_map[0][0][3].types = CORRIDOR_HOR_MAPTYPE;
+
+    Game_map[0][0][4].left = 1;
+    Game_map[0][0][4].top = 0;
+    Game_map[0][0][4].right = 1;
+    Game_map[0][0][4].buttom = 0;
+    Game_map[0][0][4].types = REWARD_MAPTYPE;
+    EntityAry_init(Game_map[0][0][4].entity, ENTITY_MAX);
+    Entity_insert(Game_map[0][0][4].entity, Entity_Init_P(150, cxClient*4 + 125, cyClient/2 - 75, TELEPORT_TYPE, 100));
+    //-----
+
+    //d = 2
+    Map_rooms_to_clear[1] = 2;
     Game_map[1][0][0].left = 0;
     Game_map[1][0][0].top = 0;
     Game_map[1][0][0].right = 1;
-    Game_map[1][0][0].buttom = 0;
+    Game_map[1][0][0].buttom = 1;
     Game_map[1][0][0].types = REWARD_MAPTYPE;
     EntityAry_init(Game_map[0][0][0].entity, ENTITY_MAX);
 
@@ -119,28 +166,41 @@ void MapInit()
     Game_map[1][0][2].types = BATTLE_MAPTYPE;
     Game_map[1][0][2].status = BATTLING_MAPSTATUS;
     EntityAry_init(Game_map[1][0][2].entity, ENTITY_MAX);
-    Monster1_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 200, 200, MONSTER_TYPE, 100));
-    Monster1_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 400, 400, MONSTER_TYPE, 100));
-    Monster1_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 400, 200, MONSTER_TYPE, 100));
-    Monster1_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 200, 400, MONSTER_TYPE, 100));
-}
+    Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 200, 200, MONSTER_TYPE, 100));
+    Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 300, 300, MONSTER_TYPE, 100));
+    Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 200, 400, MONSTER_TYPE, 100));
 
-void MapLoad(Map **dest, Map **src,int siz1, int siz2)
-{
-    for(int i = 0; i < siz2; i++){
-        for(int j = 0; j < siz1; j++){
-            dest[i][j] = src[i][j];
-        }
-    }
-}
+    Game_map[1][1][0].types = CORRIDOR_VER_MAPTYPE;
 
-Weapon WeaponInit(float damage, float bullet_cd, int types)
-{
-    Weapon w;
-    w.damage = damage;
-    w.bullet_cd = bullet_cd;
-    w.types = types;
-    return w;
+    Game_map[1][2][0].left = 0;
+    Game_map[1][2][0].top = 1;
+    Game_map[1][2][0].right = 0;
+    Game_map[1][2][0].buttom = 1;
+    Game_map[1][2][0].types = BATTLE_MAPTYPE;
+    Game_map[1][2][0].status = BATTLING_MAPSTATUS;
+    EntityAry_init(Game_map[1][2][0].entity, ENTITY_MAX);
+    Monster_Insert(Game_map[1][2][0].entity, Entity_Init_P(64, cxClient*2 + 200, 200, MONSTER_TYPE, 100));
+
+    Game_map[1][2][1].types = CORRIDOR_HOR_MAPTYPE;
+    Game_map[1][2][2].left = 1;
+    Game_map[1][2][2].top = 0;
+    Game_map[1][2][2].right = 0;
+    Game_map[1][2][2].buttom = 0;
+    Game_map[1][2][2].types = REWARD_MAPTYPE;
+    EntityAry_init(Game_map[1][2][2].entity, ENTITY_MAX);
+    Entity_insert(Game_map[1][2][2].entity, Entity_Init_P(150, cxClient*2 + 200, cyClient*2 + cyClient/2 - 25, TELEPORT_TYPE, 100));
+    //-----
+
+    //d = 3
+
+    //-----
+
+    //d = 4
+
+    //-----
+
+    //Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 200, 400, MONSTER_TYPE, 100));
+    //Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 400, 400, MONSTER_TYPE, 100));
 }
 
 int MapEdgeDet(int depth, float x, float y, int wid)//返回1时表示碰撞 0表示无碰撞

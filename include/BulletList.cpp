@@ -42,6 +42,4 @@ void bullet_free(myadt_bullet &adt)
     free(adt.b);
 }
 
-
-
 //ณยึวมุ 20220919

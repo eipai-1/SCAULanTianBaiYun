@@ -1,11 +1,12 @@
 #ifndef MY_HEADER_H_
 #define MY_HEADER_H_
 
+#include "BulletList.h"
 #include "le.h"
 #include "chen.h"
 
 #define MAP_DEPTH 5
-#define MAP_SIZE 4
+#define MAP_SIZE 5
 
 #define NO_MAPEDGE 0
 #define MAPEDGE 1
@@ -45,15 +46,10 @@
 typedef struct{
     int types;
     int status;
+    int rooms_to_clear = 0;
     bool left, right, top, buttom;//0并表示不可用，即关门 1表示可用，即开门
     EntityAdt entity;
 }Map;
-
-typedef struct{
-    float damage;
-    float bullet_cd;
-    int types;
-}Weapon;
 
 void CharcMove(Charc_Info & s, float x, float y);//人物移动 x轴
 
@@ -62,8 +58,6 @@ void Monster1_Insert(EntityAdt &entity, PCharc_Info p_charc);
 double sinx(int cur_x, int cur_y);
 double cosx(int cur_x, int cur_y);
 int GetRnd(int seeds);
-
-Weapon WeaponInit(float damage, float bullet_cd, int types);
 
 void MapInit();
 int MapEdgeDet(int depth, float x, float y, int wid);//返回1时表示碰撞 0表示无碰撞

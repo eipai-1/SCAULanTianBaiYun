@@ -32,16 +32,18 @@ static float key_down_cnt, key_down_time = 300;
 //地图相关参数
 int Map_depth_now = 0;
 Map Game_map[MAP_DEPTH][MAP_SIZE][MAP_SIZE];
+int Map_rooms_to_clear[MAP_DEPTH];
 float map_wall_width = 2;
 float Rad_of_gate = 40, horCor_wid = 80, horCor_lgh = cxClient,
 verCor_wid = 80, verCor_lgh = cyClient;
 int x_map = 0, y_map = 0, map_temp_left, map_temp_top, map_temp_right, map_temp_buttom;
 bool Monster_clear = true;
+int rooms_cleared = 0;
 //-----
 
 //弹幕相关参数
 static int bullet_damage = 10;
-static const int AMMO_MAX = 10;//全局最大弹幕数
+static const int AMMO_MAX = 1000;//全局最大弹幕数
 myadt_bullet Ammo;//全局弹幕
 float bullet_cd = 500, bullet_speed = 1.2;//弹幕cd与弹幕射速
 static float bullet_cd_cnt = bullet_cd;//弹幕cd计时器
@@ -56,11 +58,13 @@ const int ENTITY_MAX = 100;//最大实体数
 EntityAdt Global_entity;//全局实体
 
 int Monster1_wid = 64;
-float Monster1_steps = 0.1, Monster1_movetime = 500, Monster1_direction;
+float Monster1_steps = 0.27, Monster1_movetime = 500, Monster1_direction;
 int Monster1_movemode = 1;
 float Alert_range_squared = 9e4;
 float  Monster1_bullet_speed = 0.5;
 float Monster1_bullet_movetime = 1000;
+
+float Monster2_damage = 7;
 
 int hp_paint_width = 5;
 //-----
@@ -71,7 +75,6 @@ int weapon_now;
 int buff_choose[3];
 int Game_buff[MAX_BUFF + 1];//全部初始值设为0，代表buff未选，1表示buff已选
 int cor_buff_x = 350, cor_buff_y = 350, cor_buff_wid = 50;
-//char buff_text[MAX_BUFF][100];
 static int chosen_buff;
 
 static int cure_item_num = 2, time_item_num = 2;
@@ -83,7 +86,7 @@ float bulletspeedup_buff_factor = 0.3, damageup_buff_factor = 0.4, firingrateup_
 float rush_cnt = 80, rush_time = 80, rush_speed = 1.5, rush_cd_cnt = 1800, rush_cd_time = 1800, rushing_status = 0;
 float time_item_cd = 5000, time_item_cnt = 5000, cure_item_cd = 3000, cure_item_cnt = 3000;
 
-float time_factor = 1.0;
+float time_factor = 1.0;//时间修正系数
 float time_slow_cnt = 0, time_slow_duration = 2000;
 //-----
 
@@ -216,6 +219,7 @@ void GameMain()
         if(time_factor != 1.0){
             if(time_slow_cnt >= time_slow_duration){
                 time_factor = 1.0;
+                time_slow_cnt = 0;
             }
             else{
                 time_slow_cnt += time_lag;
@@ -277,6 +281,7 @@ void GameMain()
         //战斗结束，开门
         if(Game_status == BATTLING_GAMESTATUS && Monster_clear){
             Game_status = RUNNING_GAMESTATUS;
+            rooms_cleared++;
             Game_map[Map_depth_now][y_map][x_map].status = NULL_MAPSTATUS;
             Game_map[Map_depth_now][y_map][x_map].left = map_temp_left;
             Game_map[Map_depth_now][y_map][x_map].top = map_temp_top;
@@ -314,6 +319,7 @@ void GameMain()
                 }
             }
             else{
+                if(GetAsyncKeyState(VK_SHIFT));
                 rush_cd_cnt += time_lag;
             }
         }
@@ -398,6 +404,7 @@ void GameMain()
 }
 void GameInit()
 {
+    printf("init start\n");
     hBmp_character = LoadBitmap(hInstance, TEXT("character"));
     hBmp_background = LoadBitmap(hInstance, TEXT("background"));
     hBmp_character2 = LoadBitmap(hInstance, TEXT("character2"));
@@ -423,14 +430,16 @@ void GameInit()
     hBmp_curedrop = LoadBitmap(hInstance, TEXT("curedrop"));
     hBmp_curedrop2 = LoadBitmap(hInstance, TEXT("curedrop2"));
 
+    printf("Map start\n");
     MapInit();
+    printf("map finished\n");
 
     bulletary_init(Ammo, AMMO_MAX);
 
     EntityAry_init(Global_entity, ENTITY_MAX);
     //EntityAry_init(Global_entity, ENTITY_MAX);
     Entity_insert(Game_map[Map_depth_now][0][0].entity, &CharcInfo);
-    EntityInit();
+    //EntityInit();
 
     Global_entity = Game_map[Map_depth_now][0][0].entity;
 
@@ -442,7 +451,8 @@ void GameInit()
     for(int i = 0; i < MAX_BUFF; i++){
         Game_buff[i] = 0;
     }
-    //Game_buff[MULTIBULLET_BUFF] = 1;
+    Game_buff[RUSH_BUFF] = 1;
+    printf("INIT\n");
 }
 void GamePaint(HWND hwnd)
 {
@@ -452,7 +462,11 @@ void GamePaint(HWND hwnd)
     int num;
     int cor_text_x = 200, cor_text_y = cor_buff_wid, cor_timedrop_x = 250,
     cor_timedrop_y = 5, cor_curedrop_x = 400, cor_curedrop_y = 5, cor_drop_wid = 50,
-    cor_cure_cd_x = 390, cor_cure_cd_y = 5, cor_time_cd_x = 240, cor_time_cd_y = 5, cor_cd_wid = 8, cor_cd_lgh = 50;
+    cor_cure_cd_x = 390, cor_cure_cd_y = 5, cor_time_cd_x = 240, cor_time_cd_y = 5,
+    cor_cd_wid = 8, cor_cd_lgh = 50;
+
+    int cor_rush_skill_x = 80, cor_rush_skill_y = 500, cor_rush_skill_wid = 100,
+    cor_rush_cd_x = 72, cor_rush_cd_y = 500, cor_rush_cd_lgh = 50, cor_rush_cd_wid = 8;
 
     hdc = BeginPaint(hwnd, &ps);
 
@@ -486,11 +500,14 @@ void GamePaint(HWND hwnd)
 
         SetTextColor(hdcBuf, RGB(40, 20, 50));
         SelectObject(hdcBuf, (HFONT)hFont);
-        //TextOut(hdcBuf, 0, 0, szbuffer, wsprintf(szbuffer, "rushCD:%d", (int)rush_cd_cnt));
         TextOut(hdcBuf, cxClient - 200, 0, szbuffer, wsprintf(szbuffer, "FPS:%d", (int)(1000.0/time_lag)));
+        TextOut(hdcBuf, 0, 40, szbuffer, wsprintf(szbuffer, "x_map:%d y_map:%d",x_map, y_map));
         //TextOut(hdcBuf, 0, Font_height, szbuffer, wsprintf(szbuffer, "%d", (int)(damage_factor*100)));
 
         if(cure_item_num > 0){
+            SelectObject(hdcBuf, GetStockObject(NULL_BRUSH));
+            Rectangle(hdcBuf, cor_curedrop_x, cor_curedrop_y,
+                      cor_curedrop_x + cor_drop_wid, cor_curedrop_y + cor_drop_wid);
             SelectObject(hdcBmp, hBmp_curedrop);
             SelectObject(hdcBmp2, hBmp_curedrop2);
             StretchBlt(hdcBuf, cor_curedrop_x, cor_curedrop_y,
@@ -553,6 +570,24 @@ void GamePaint(HWND hwnd)
 
                 DeleteObject(hBrush);
 
+            }
+        }
+
+        if(Game_buff[RUSH_BUFF]){
+            SelectObject(hdcBmp, hBmp_rush_buff);
+            StretchBlt(hdcBuf, cor_rush_skill_x, cor_rush_skill_y, cor_rush_skill_wid,
+                       cor_rush_skill_wid, hdcBmp, 0, 0, 50, 50, SRCCOPY);
+
+            if(rush_cd_cnt < rush_cd_time){
+                SelectObject(hdcBuf, GetStockObject(WHITE_BRUSH));
+                RoundRect(hdcBuf, cor_rush_cd_x, cor_rush_cd_y,
+                          cor_rush_cd_x + cor_rush_cd_wid, cor_rush_cd_y + cor_rush_cd_lgh, 4, 4);
+
+                hBrush = CreateSolidBrush(RGB(25, 25, 255));
+                SelectObject(hdcBuf, hBrush);
+                RoundRect(hdcBuf, cor_rush_cd_x, cor_rush_cd_y + cor_rush_cd_lgh*(rush_cd_cnt/rush_cd_time),
+                          cor_rush_cd_x + cor_rush_cd_wid, cor_rush_cd_y + cor_rush_cd_lgh, 4, 4);
+                DeleteObject(hBrush);
             }
         }
 
@@ -774,8 +809,13 @@ void GameInteract(int event, int id)
     bool flag = true;
     switch(event){
     case TELEPORT_TYPE:
+        if(rooms_cleared < Map_rooms_to_clear[Map_depth_now]){
+            break;
+        }
         Map_depth_now++;
+        rooms_cleared = 0;
         CharcInfo.x = cxClient/2, CharcInfo.y = cyClient/2;
+        x_map = 0, y_map = 0;
         srand((int)(time_lag * 1000 + 500)%1000);
         rnd = rand() % MAX_BUFF + 1;
         for(int i = 0; i < 3;){
@@ -871,19 +911,24 @@ void MapPaint()
 void BulletUpdate()
 {
     int Col_id, ret_id;
+    float factor = 1.0;
     if(bullet_cd_cnt < bullet_cd){
-        bullet_cd_cnt += time_lag;
+        bullet_cd_cnt += time_lag*factor;
     }
     for(int i = 0; i < Ammo.p; i++){
-        if(MapEdgeDet(Map_depth_now, Ammo.b[i].x + Ammo.b[i].vx*time_lag, Ammo.b[i].y + Ammo.b[i].vy*time_lag, 10)){
+        if(Ammo.b[i].belongs != MAIN_CHARC_BELONGS){
+            factor = time_factor;
+        }
+
+        if(MapEdgeDet(Map_depth_now, Ammo.b[i].x + Ammo.b[i].vx*time_lag*factor, Ammo.b[i].y + Ammo.b[i].vy*time_lag, 10)){
             bullet_delete(Ammo, i);
         }
 
-        Col_id = GlobalCollisionDet(Global_entity, Ammo.b[i].x + Ammo.b[i].vx*time_lag, Ammo.b[i].y + Ammo.b[i].vy*time_lag, 15, -1, &ret_id);
+        Col_id = GlobalCollisionDet(Global_entity, Ammo.b[i].x + Ammo.b[i].vx*time_lag*factor, Ammo.b[i].y + Ammo.b[i].vy*time_lag, 15, -1, &ret_id);
         switch(Col_id){
-        case NO_COLLSION_TYPE:
-            Ammo.b[i].x += (Ammo.b[i].vx*time_lag);
-            Ammo.b[i].y += (Ammo.b[i].vy*time_lag);
+        case NOCOLLISION_TYPE:
+            Ammo.b[i].x += (Ammo.b[i].vx*time_lag*factor);
+            Ammo.b[i].y += (Ammo.b[i].vy*time_lag*factor);
             break;
 
         case MAIN_CHARC_TYPE:
@@ -894,8 +939,8 @@ void BulletUpdate()
                 return;
             }
             else{
-                Ammo.b[i].x += (Ammo.b[i].vx*time_lag);
-                Ammo.b[i].y += (Ammo.b[i].vy*time_lag);
+                Ammo.b[i].x += (Ammo.b[i].vx*time_lag*factor);
+                Ammo.b[i].y += (Ammo.b[i].vy*time_lag*factor);
             }
             break;
 
@@ -905,6 +950,8 @@ void BulletUpdate()
             break;
 
         case MONSTER_TYPE:
+        case MONSTER2_TYPE:
+        case BOSS_MONSTER_TYPE:
             if(Ammo.b[i].belongs == MAIN_CHARC_BELONGS){
                 if(Ammo.b[i].pre_id != ret_id){
                     Global_entity.b[ret_id]->hp_now -= (Ammo.b[i].damage * damage_factor);
@@ -913,8 +960,8 @@ void BulletUpdate()
                 }
 
                 if(Game_buff[PIERCEBULLET_BUFF]){
-                    Ammo.b[i].x += (Ammo.b[i].vx*time_lag);
-                    Ammo.b[i].y += (Ammo.b[i].vy*time_lag);
+                    Ammo.b[i].x += (Ammo.b[i].vx*time_lag*factor);
+                    Ammo.b[i].y += (Ammo.b[i].vy*time_lag*factor);
                 }
                 else{
                     bullet_delete(Ammo, i);
@@ -926,14 +973,14 @@ void BulletUpdate()
                 }
             }
             else{
-                Ammo.b[i].x += (Ammo.b[i].vx*time_lag);
-                Ammo.b[i].y += (Ammo.b[i].vy*time_lag);
+                Ammo.b[i].x += (Ammo.b[i].vx*time_lag*factor);
+                Ammo.b[i].y += (Ammo.b[i].vy*time_lag*factor);
             }
             break;
 
         default:
-            Ammo.b[i].x += (Ammo.b[i].vx*time_lag);
-            Ammo.b[i].y += (Ammo.b[i].vy*time_lag);
+            Ammo.b[i].x += (Ammo.b[i].vx*time_lag*factor);
+            Ammo.b[i].y += (Ammo.b[i].vy*time_lag*factor);
         }
     }
 }
@@ -969,6 +1016,7 @@ void EntityPaint()
 
         case MONSTER_TYPE:
         case MONSTER2_TYPE:
+        case BOSS_MONSTER_TYPE:
             SelectObject(hdcBmp, hBmp_character);
             SelectObject(hdcBmp2, hBmp_character2);
             StretchBlt(hdcBuf, Global_entity.b[i]->x - CharcInfo.x + cxClient/2,
@@ -1027,8 +1075,9 @@ void EntityUpdate()
 {
     Monster_clear = true;
     for(int i = 0; i < Global_entity.p; i++){
-        if(Global_entity.b[i]->types == MONSTER_TYPE){
-
+        switch(Global_entity.b[i]->types)
+        {
+        case MONSTER_TYPE:
             if(Monster_clear){//检测是否还有怪物
                 Monster_clear = false;
             }
@@ -1042,17 +1091,49 @@ void EntityUpdate()
                     Entity_insert(Global_entity, Entity_Init_P(25, Global_entity.b[i]->x, Global_entity.b[i]->y, TIMEDROP_TYPE, 100));
                 }
                 Entity_delete(Global_entity, i);//删除操作
-
             }
             else{
-                MonsterMoveType1(*Global_entity.b[i], CharcInfo, time_lag);
+                MonsterMoveType1(*Global_entity.b[i], CharcInfo, time_lag*time_factor);
             }
+            break;
+
+        case MONSTER2_TYPE:
+            if(Monster_clear){//检测是否还有怪物
+                Monster_clear = false;
+            }
+
+            if(Global_entity.b[i]->hp_now < 0){
+                srand((int)(time_lag * 1000) % 100);
+                if(rand() % 10 == 2){//掉落治疗药水
+                    Entity_insert(Global_entity, Entity_Init_P(25, Global_entity.b[i]->x, Global_entity.b[i]->y, CUREDROP_TYPE, 100));
+                }
+                else if(rand() % 15 == 3){//掉落时间宝石
+                    Entity_insert(Global_entity, Entity_Init_P(25, Global_entity.b[i]->x, Global_entity.b[i]->y, TIMEDROP_TYPE, 100));
+                }
+                Entity_delete(Global_entity, i);//删除操作
+            }
+            else{
+                MonsterMoveType2(*Global_entity.b[i], CharcInfo, time_lag*time_factor);
+            }
+            break;
+
+        case BOSS_MONSTER_TYPE:
+            if(Monster_clear){//检测是否还有怪物
+                Monster_clear = false;
+            }
+            if(Global_entity.b[i]->hp_now < 0){
+                Entity_delete(Global_entity, i);//删除操作
+            }
+            else{
+                MonsterMoveType3(*Global_entity.b[i], CharcInfo, time_lag*time_factor);
+            }
+            break;
         }
     }
 }
-void EntityInit()
+void EntityInit(float x, float y, int types)
 {
-    Entity_insert(Global_entity, Entity_Init_P(Monster1_wid, 100, 100, MONSTER_TYPE, 100));
+    Entity_insert(Global_entity, Entity_Init_P(Monster1_wid, x, y, types, 100));
     Global_entity.b[Global_entity.p - 1]->cnt = 0;
     Global_entity.b[Global_entity.p - 1]->movemode = MOVEMODE_SLEEP;
     Global_entity.b[Global_entity.p - 1]->bullet_cnt = 0;
@@ -1074,18 +1155,19 @@ void EntityHpPaint(Charc_Info &s)
 }
 void MainCharcHpPaint()
 {
+    int cor_left;
     hBrush = CreateSolidBrush(RGB(0xff, 0xff, 0xff));
     SelectObject(hdcBuf, hBrush);
-    RoundRect(hdcBuf, 60, 20, 160, 30, 5, 5);
+    RoundRect(hdcBuf, 10, 20, 140, 30, 5, 5);
     DeleteObject(hBrush);
 
     hBrush = CreateSolidBrush(RGB(244, 40, 20));
     SelectObject(hdcBuf, hBrush);
-    RoundRect(hdcBuf, 60, 20, 60 + (100)*((float)CharcInfo.hp_now/CharcInfo.hp_max), 30, 5, 5);
+    RoundRect(hdcBuf, 10, 20, 10 + (130)*((float)CharcInfo.hp_now/CharcInfo.hp_max), 30, 5, 5);
     DeleteObject(hBrush);
 
     char szbuffer[100];
-    TextOut(hdcBuf, 170, 20, szbuffer, wsprintf(szbuffer, "%d/%d", (int)CharcInfo.hp_now, (int)CharcInfo.hp_max));
+    TextOut(hdcBuf, 145, 20, szbuffer, wsprintf(szbuffer, "%d/%d", (int)CharcInfo.hp_now, (int)CharcInfo.hp_max));
 }
 //-----
 
