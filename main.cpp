@@ -105,38 +105,36 @@ const float Pi = 2*acos(0.0);
 /*-----游戏主要函数声明-----*/
 //游戏引擎声明
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-void GameMain();
-void GameInit();
-void GamePaint(HWND);
+void GameMain();//游戏更新函数
+void GameInit();//游戏初始化函数
+void GamePaint(HWND);//游戏绘制函数
 void GameQuit();
-void GameEventLeftClick(int cur_x, int cur_y);
-void GameInteract(int event, int id);
+void GameEventLeftClick(int cur_x, int cur_y);//游戏左键单击事件函数
+void GameInteract(int event, int id);//游戏互动函数
 void GameTextPaintDown();
 //-----
 
 //地图相关函数声明
-void MapPaint();
+void MapPaint();//地图绘制函数
 //-----
 
 //弹幕函数声明
-void BulletUpdate();
-void BulletPaint();
+void BulletUpdate();//弹幕更新函数
+void BulletPaint();//弹幕绘制函数
 //-----
 
 //实体函数声明
-void EntityUpdate();
-void EntityPaint();
+void EntityUpdate();//实体更新
+void EntityPaint();//实体绘制
 void EntityInit();
 void EntityHpPaint(Charc_Info &s);
 void MainCharcHpPaint();
 //-----
 
 //游戏道具函数声明
-void Weapon_Load();
 //-----
 
 //其他函数声明
-void RndPaint();
 //-----
 
 
