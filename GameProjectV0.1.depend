@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1665863296 source:d:\1\program\project\gameprojectv0.1\main.cpp
+1665892002 source:d:\1\program\project\gameprojectv0.1\main.cpp
 	<windows.h>
 	<stdio.h>
 	<math.h>
@@ -47,12 +47,11 @@
 	"le.h"
 	"chen.h"
 
-1665242499 source:d:\1\program\project\gameprojectv0.1\include\le.cpp
+1665892114 source:d:\1\program\project\gameprojectv0.1\include\le.cpp
 	"le.h"
 	<stdlib.h>
-	<stdio.h>
 
-1665852730 d:\1\program\project\gameprojectv0.1\include\le.h
+1665892069 d:\1\program\project\gameprojectv0.1\include\le.h
 
 1664784328 source:c:\users\administrator\desktop\game new\gameprojectv0.1\include\bulletlist.cpp
 	<stdlib.h>

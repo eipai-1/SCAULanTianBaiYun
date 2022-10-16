@@ -1155,7 +1155,6 @@ void EntityHpPaint(Charc_Info &s)
 }
 void MainCharcHpPaint()
 {
-    int cor_left;
     hBrush = CreateSolidBrush(RGB(0xff, 0xff, 0xff));
     SelectObject(hdcBuf, hBrush);
     RoundRect(hdcBuf, 10, 20, 140, 30, 5, 5);
