@@ -492,7 +492,7 @@ void GameInit()
     for(int i = 0; i < MAX_BUFF; i++){
         Game_buff[i] = 0;
     }
-    Game_buff[RAGE_BUFF] = 1;
+    //Game_buff[RAGE_BUFF] = 1;
     //printf("INIT\n");
 }
 void GamePaint(HWND hwnd)
