@@ -154,3 +154,52 @@
 	"BulletList.h"
 	"Ycx_header.h"
 
+1665890593 source:c:\users\1010101\desktop\pixelknight\gameprojectv0.1\include\bulletlist.cpp
+	<stdlib.h>
+	<stdio.h>
+	"BulletList.h"
+
+1665890682 c:\users\1010101\desktop\pixelknight\gameprojectv0.1\include\bulletlist.h
+
+1665917814 source:c:\users\1010101\desktop\pixelknight\gameprojectv0.1\include\chen.cpp
+	"le.h"
+	"chen.h"
+	<stdlib.h>
+	<stdio.h>
+	<math.h>
+	<time.h>
+
+1665899194 c:\users\1010101\desktop\pixelknight\gameprojectv0.1\include\le.h
+
+1665857872 c:\users\1010101\desktop\pixelknight\gameprojectv0.1\include\chen.h
+	"le.h"
+	"BulletList.h"
+	"Ycx_header.h"
+
+1665900448 c:\users\1010101\desktop\pixelknight\gameprojectv0.1\include\ycx_header.h
+	"BulletList.h"
+	"le.h"
+	"chen.h"
+
+1665892175 source:c:\users\1010101\desktop\pixelknight\gameprojectv0.1\include\le.cpp
+	"le.h"
+	<stdlib.h>
+
+1665903583 source:c:\users\1010101\desktop\pixelknight\gameprojectv0.1\include\resources.rc
+
+1665904111 source:c:\users\1010101\desktop\pixelknight\gameprojectv0.1\include\ycx_header.cpp
+	"Ycx_header.h"
+	<stdlib.h>
+	<stdio.h>
+	<cmath>
+
+1665918287 source:c:\users\1010101\desktop\pixelknight\gameprojectv0.1\main.cpp
+	<windows.h>
+	<stdio.h>
+	<math.h>
+	<time.h>
+	"include/Ycx_header.h"
+	"include/BulletList.h"
+	"include/le.h"
+	"include/chen.h"
+

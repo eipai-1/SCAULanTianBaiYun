@@ -109,8 +109,10 @@ void MonsterMoveType2(Charc_Info &Monster, Charc_Info &main_char, float time_lag
                             main_char.hp_now -= Monster2_damage;
                             is_valid = false;
                         }
-                        Monster.x += x;
-                        Monster.y += y;
+                        if(!MapEdgeDet(Map_depth_now, Monster.x + x, Monster.y + y, Monster.width)){
+                            Monster.x += x;
+                            Monster.y += y;
+                        }
                         break;
 
                     case MONSTER2_TYPE:

@@ -82,7 +82,7 @@ static int chosen_buff;
 static int cure_item_num = 0, time_item_num = 0;
 static int cure_hp_recover = 10;
 float bloodsucking_rate = 0.05;
-float damage_factor = 1.0;
+float damage_factor = 1.0, damage_factor2 = 0;
 float speed_factor = 1.0;
 float bulletspeedup_buff_factor = 0.3, damageup_buff_factor = 0.4, firingrateup_buff_factor = 0.3;
 float rush_cnt = 80, rush_time = 80, rush_speed = 1.5, rush_cd_cnt = 1800, rush_cd_time = 1800, rushing_status = 0;
@@ -172,9 +172,12 @@ void GameMain()
         }
         break;
 
-    case END_GAMESTATUS:
-        if(GetAsyncKeyState(VK_ESCAPE))Game_status = START_GAMESTATUS;
+    case END_GAMESTATUS:{
+        if(GetAsyncKeyState(VK_ESCAPE)){
+            PostQuitMessage(0);
+        }
         break;
+    }
 
     case RUNNING_GAMESTATUS:
     case BATTLING_GAMESTATUS:
@@ -323,9 +326,8 @@ void GameMain()
 
         //根据buff更新数值
         if(Game_buff[RAGE_BUFF]){
-            float rate = 1 - (CharcInfo.hp_now/CharcInfo.hp_max);
-            speed_factor = (1 + rate);
-            damage_factor = (damage_factor + rate);
+            damage_factor2 = 1 - (CharcInfo.hp_now/CharcInfo.hp_max);
+            speed_factor = (1 + damage_factor2);
         }
         //-----
 
@@ -490,7 +492,7 @@ void GameInit()
     for(int i = 0; i < MAX_BUFF; i++){
         Game_buff[i] = 0;
     }
-    //Game_buff[RUSH_BUFF] = 1;
+    Game_buff[RAGE_BUFF] = 1;
     //printf("INIT\n");
 }
 void GamePaint(HWND hwnd)
@@ -1035,10 +1037,10 @@ void BulletUpdate()
         case BOSS_MONSTER_TYPE:
             if(Ammo.b[i].belongs == MAIN_CHARC_BELONGS){
                 if(Ammo.b[i].pre_id != ret_id){
-                    Global_entity.b[ret_id]->hp_now -= (Ammo.b[i].damage * damage_factor);
+                    Global_entity.b[ret_id]->hp_now -= (Ammo.b[i].damage * (damage_factor + damage_factor2));
                     Ammo.b[i].pre_id = ret_id;
                     if(Game_buff[BLOOD_BUFF]){
-                        blood_sucked = (Ammo.b[i].damage * damage_factor * bloodsucking_rate);
+                        blood_sucked = (Ammo.b[i].damage * (damage_factor + damage_factor2) * bloodsucking_rate);
                         if(CharcInfo.hp_now + blood_sucked <= CharcInfo.hp_max){
                             CharcInfo.hp_now += blood_sucked;
                         }
