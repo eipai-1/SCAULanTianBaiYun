@@ -179,7 +179,7 @@ void MapInit()
     Game_map[1][2][0].types = BATTLE_MAPTYPE;
     Game_map[1][2][0].status = BATTLING_MAPSTATUS;
     EntityAry_init(Game_map[1][2][0].entity, ENTITY_MAX);
-    Monster_Insert(Game_map[1][2][0].entity, Entity_Init_P(64, cxClient*2 + 200, 200, MONSTER_TYPE, 100));
+    Monster_Insert(Game_map[1][2][0].entity, Entity_Init_P(64, 500, cyClient*2 + 300, MONSTER_TYPE, 100));
 
     Game_map[1][2][1].types = CORRIDOR_HOR_MAPTYPE;
     Game_map[1][2][2].left = 1;
@@ -192,11 +192,9 @@ void MapInit()
     //-----
 
     //d = 3
-
     //-----
 
     //d = 4
-
     //-----
 
     //Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 200, 400, MONSTER_TYPE, 100));

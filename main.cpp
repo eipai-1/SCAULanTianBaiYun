@@ -204,7 +204,7 @@ void GameMain()
         if(cure_item_num > 0){
             if(cure_item_cnt >= cure_item_cd){
                 if(GetAsyncKeyState('H')){
-                    if(CharcInfo.hp_now + cure_hp_recover < CharcInfo.hp_max){
+                    if(CharcInfo.hp_now + cure_hp_recover <= CharcInfo.hp_max){
                         CharcInfo.hp_now += cure_hp_recover;
                     }
                     cure_item_num--;
