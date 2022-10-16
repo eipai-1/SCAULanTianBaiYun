@@ -1,19 +1,6 @@
 #ifndef LE_H_
 #define LE_H_
 
-#define NOCOLLISION_TYPE 0
-#define OBSTACLE_TYPE 1
-#define OBSTACLE_UNBREAKABLE_TYPE 2
-#define MONSTER_TYPE 3
-#define MAIN_CHARC_TYPE 4
-#define MONSTER2_TYPE 5
-#define TELEPORT_TYPE 6
-#define CUREDROP_TYPE 7
-#define TIMEDROP_TYPE 8
-#define LONGRANG_MONSTER_TYPE 3
-#define RUSH_MONSTER_TYPE 5
-#define BOSS_MONSTER_TYPE 11
-
 typedef struct{
     int width = 50;
     float x, y;

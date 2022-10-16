@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1665892002 source:d:\1\program\project\gameprojectv0.1\main.cpp
+1665903764 source:d:\1\program\project\gameprojectv0.1\main.cpp
 	<windows.h>
 	<stdio.h>
 	<math.h>
@@ -23,7 +23,7 @@
 1663595063 d:\1\program\project\gameprojectv0.1\include\my_header.h
 	<windows.h>
 
-1665837720 source:d:\1\program\project\gameprojectv0.1\include\resources.rc
+1665903583 source:d:\1\program\project\gameprojectv0.1\include\resources.rc
 
 1663597449 source:d:\1\program\project\gameprojectv0.1\include\my_header.cpp
 	"My_header.h"
@@ -36,22 +36,22 @@
 
 1665890682 d:\1\program\project\gameprojectv0.1\include\bulletlist.h
 
-1665891513 source:d:\1\program\project\gameprojectv0.1\include\ycx_header.cpp
+1665904111 source:d:\1\program\project\gameprojectv0.1\include\ycx_header.cpp
 	"Ycx_header.h"
 	<stdlib.h>
 	<stdio.h>
 	<cmath>
 
-1665890725 d:\1\program\project\gameprojectv0.1\include\ycx_header.h
+1665900448 d:\1\program\project\gameprojectv0.1\include\ycx_header.h
 	"BulletList.h"
 	"le.h"
 	"chen.h"
 
-1665892114 source:d:\1\program\project\gameprojectv0.1\include\le.cpp
+1665892175 source:d:\1\program\project\gameprojectv0.1\include\le.cpp
 	"le.h"
 	<stdlib.h>
 
-1665892069 d:\1\program\project\gameprojectv0.1\include\le.h
+1665899194 d:\1\program\project\gameprojectv0.1\include\le.h
 
 1664784328 source:c:\users\administrator\desktop\game new\gameprojectv0.1\include\bulletlist.cpp
 	<stdlib.h>

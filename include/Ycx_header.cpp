@@ -29,7 +29,7 @@ void CharcMove(Charc_Info & s, float x, float y)
             if(Game_status == RUNNING_GAMESTATUS
                && Game_map[Map_depth_now][temp_y][temp_x].status == BATTLING_MAPSTATUS){
                 //printf("1\n");
-                if(LockDoorCnt < 4){
+                if(LockDoorCnt < 18){
                     LockDoorCnt++;
                 }
                 else{
@@ -125,6 +125,7 @@ void MapInit()
     Game_map[0][0][0].buttom = 0;
     Game_map[0][0][0].types = REWARD_MAPTYPE;
     EntityAry_init(Game_map[0][0][0].entity, ENTITY_MAX);
+    //Entity_insert(Game_map[0][0][0].entity, Entity_Init_P(50, 200, 200, MONSTER_TYPE, 30));
 
     Game_map[0][0][1].types = CORRIDOR_HOR_MAPTYPE;
 
@@ -136,6 +137,13 @@ void MapInit()
     Game_map[0][0][2].status = BATTLING_MAPSTATUS;
     EntityAry_init(Game_map[0][0][2].entity, ENTITY_MAX);
     Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(64, cxClient*2 + cxClient/2 - 25, cyClient/2 - 25, MONSTER_TYPE, 100));
+    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 200, 200, OBSTACLE_TYPE, 30));
+    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 240, 200, OBSTACLE_TYPE, 30));
+    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 280, 200, OBSTACLE_TYPE, 30));
+
+    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 200, 400, OBSTACLE_TYPE, 30));
+    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 240, 400, OBSTACLE_TYPE, 30));
+    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 280, 400, OBSTACLE_TYPE, 30));
 
     Game_map[0][0][3].types = CORRIDOR_HOR_MAPTYPE;
 
@@ -155,7 +163,7 @@ void MapInit()
     Game_map[1][0][0].right = 1;
     Game_map[1][0][0].buttom = 1;
     Game_map[1][0][0].types = REWARD_MAPTYPE;
-    EntityAry_init(Game_map[0][0][0].entity, ENTITY_MAX);
+    EntityAry_init(Game_map[1][0][0].entity, ENTITY_MAX);
 
     Game_map[1][0][1].types = CORRIDOR_HOR_MAPTYPE;
 
@@ -167,21 +175,23 @@ void MapInit()
     Game_map[1][0][2].status = BATTLING_MAPSTATUS;
     EntityAry_init(Game_map[1][0][2].entity, ENTITY_MAX);
     Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 200, 200, MONSTER_TYPE, 100));
-    Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 300, 300, MONSTER_TYPE, 100));
+    Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 300, 300, MONSTER2_TYPE, 100));
     Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 200, 400, MONSTER_TYPE, 100));
 
     Game_map[1][1][0].types = CORRIDOR_VER_MAPTYPE;
 
     Game_map[1][2][0].left = 0;
     Game_map[1][2][0].top = 1;
-    Game_map[1][2][0].right = 0;
-    Game_map[1][2][0].buttom = 1;
+    Game_map[1][2][0].right = 1;
+    Game_map[1][2][0].buttom = 0;
     Game_map[1][2][0].types = BATTLE_MAPTYPE;
     Game_map[1][2][0].status = BATTLING_MAPSTATUS;
     EntityAry_init(Game_map[1][2][0].entity, ENTITY_MAX);
-    Monster_Insert(Game_map[1][2][0].entity, Entity_Init_P(64, 500, cyClient*2 + 300, MONSTER_TYPE, 100));
+    Monster_Insert(Game_map[1][2][0].entity, Entity_Init_P(64, 500, cyClient*2 + 300, MONSTER2_TYPE, 100));
+    Monster_Insert(Game_map[1][2][0].entity, Entity_Init_P(64, 500, cyClient*2 + 400, MONSTER_TYPE, 100));
 
     Game_map[1][2][1].types = CORRIDOR_HOR_MAPTYPE;
+
     Game_map[1][2][2].left = 1;
     Game_map[1][2][2].top = 0;
     Game_map[1][2][2].right = 0;
@@ -192,9 +202,70 @@ void MapInit()
     //-----
 
     //d = 3
+    Map_rooms_to_clear[2] = 3;
+
+    Game_map[2][0][0].left = 0;
+    Game_map[2][0][0].top = 0;
+    Game_map[2][0][0].right = 0;
+    Game_map[2][0][0].buttom = 1;
+    Game_map[2][0][0].types = REWARD_MAPTYPE;
+    EntityAry_init(Game_map[1][0][0].entity, ENTITY_MAX);
+
+    Game_map[2][1][0].types = CORRIDOR_VER_MAPTYPE;
+
+    Game_map[2][2][0].left = 0;
+    Game_map[2][2][0].top = 1;
+    Game_map[2][2][0].right = 0;
+    Game_map[2][2][0].buttom = 1;
+    Game_map[2][2][0].types = BATTLE_MAPTYPE;
+    Game_map[2][2][0].status = BATTLING_MAPSTATUS;
+    EntityAry_init(Game_map[2][2][0].entity, ENTITY_MAX);
+    Entity_insert(Game_map[2][2][0].entity, Entity_Init_P(50, 500, cyClient*2 + 400, MONSTER2_TYPE, 200));
+    Entity_insert(Game_map[2][2][0].entity, Entity_Init_P(50, 400, cyClient*2 + 500, MONSTER_TYPE, 150));
+    Entity_insert(Game_map[2][2][0].entity, Entity_Init_P(50, 600, cyClient*2 + 500, MONSTER_TYPE, 150));
+
+    Game_map[2][3][0].types = CORRIDOR_VER_MAPTYPE;
+
+    Game_map[2][4][0].left = 0;
+    Game_map[2][4][0].top = 1;
+    Game_map[2][4][0].right = 1;
+    Game_map[2][4][0].buttom = 0;
+    Game_map[2][4][0].types = BATTLE_MAPTYPE;
+    Game_map[2][4][0].status = BATTLING_MAPSTATUS;
+    EntityAry_init(Game_map[2][4][0].entity, ENTITY_MAX);
+    Entity_insert(Game_map[2][4][0].entity, Entity_Init_P(50, 250, cyClient*4 + 300, MONSTER_TYPE, 150));
+    Entity_insert(Game_map[2][4][0].entity, Entity_Init_P(50, 500, cyClient*4 + 300, MONSTER2_TYPE, 200));
+    Entity_insert(Game_map[2][4][0].entity, Entity_Init_P(50, 250, cyClient*4 + 410, MONSTER_TYPE, 150));
+    Entity_insert(Game_map[2][4][0].entity, Entity_Init_P(50, 500, cyClient*4 + 410, MONSTER_TYPE, 150));
+
+    Game_map[2][4][1].types = CORRIDOR_VER_MAPTYPE;
+    Game_map[2][4][2].left = 1;
+    Game_map[2][4][2].top = 0;
+    Game_map[2][4][2].right = 0;
+    Game_map[2][4][2].buttom = 0;
+    Game_map[2][4][2].types = REWARD_MAPTYPE;
+    EntityAry_init(Game_map[2][4][2].entity, ENTITY_MAX);
+    Entity_insert(Game_map[2][4][2].entity, Entity_Init_P(50, cxClient*2 + 200, cyClient * 4 + cyClient/2 - 25, TELEPORT_TYPE, 100));
     //-----
 
     //d = 4
+    Game_map[3][0][0].left = 0;
+    Game_map[3][0][0].top = 0;
+    Game_map[3][0][0].right = 1;
+    Game_map[3][0][0].buttom = 0;
+    Game_map[3][0][0].types = REWARD_MAPTYPE;
+    EntityAry_init(Game_map[3][0][0].entity, ENTITY_MAX);
+
+    Game_map[3][0][1].types = CORRIDOR_HOR_MAPTYPE;
+
+    Game_map[3][0][2].left = 0;
+    Game_map[3][0][2].top = 0;
+    Game_map[3][0][2].right = 1;
+    Game_map[3][0][2].buttom = 0;
+    Game_map[3][0][2].types = BATTLE_MAPTYPE;
+    Game_map[3][0][2].status = BATTLING_MAPSTATUS;
+    EntityAry_init(Game_map[3][0][2].entity, ENTITY_MAX);
+    Entity_insert(Game_map[3][0][2].entity, Entity_Init_P(50, cxClient*2 + cxClient/2, cyClient/2, BOSS_MONSTER_TYPE, 500));
     //-----
 
     //Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 200, 400, MONSTER_TYPE, 100));

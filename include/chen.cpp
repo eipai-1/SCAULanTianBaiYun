@@ -117,7 +117,7 @@ void MonsterMoveType2(Charc_Info &Monster, Charc_Info &main_char, float time_lag
                         break;
 
                     default:
-                        if(!MapEdgeDet(Map_depth_now, Monster.x + x, Monster.y +  y, Monster.width)){
+                        if(!MapEdgeDet(Map_depth_now, Monster.x + x, Monster.y + y, Monster.width)){
                             Monster.x += x;
                             Monster.y += y;
                         }
