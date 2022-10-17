@@ -137,13 +137,13 @@ void MapInit()
     Game_map[0][0][2].status = BATTLING_MAPSTATUS;
     EntityAry_init(Game_map[0][0][2].entity, ENTITY_MAX);
     Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(64, cxClient*2 + cxClient/2 - 25, cyClient/2 - 25, MONSTER_TYPE, 100));
-    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 200, 200, OBSTACLE_TYPE, 30));
-    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 240, 200, OBSTACLE_TYPE, 30));
-    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 280, 200, OBSTACLE_TYPE, 30));
+    Entity_insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 200, 200, OBSTACLE_TYPE, 30));
+    Entity_insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 240, 200, OBSTACLE_TYPE, 30));
+    Entity_insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 280, 200, OBSTACLE_TYPE, 30));
 
-    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 200, 400, OBSTACLE_TYPE, 30));
-    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 240, 400, OBSTACLE_TYPE, 30));
-    Monster_Insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 280, 400, OBSTACLE_TYPE, 30));
+    Entity_insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 200, 400, OBSTACLE_TYPE, 30));
+    Entity_insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 240, 400, OBSTACLE_TYPE, 30));
+    Entity_insert(Game_map[0][0][2].entity, Entity_Init_P(40, cxClient*2 + 280, 400, OBSTACLE_TYPE, 30));
 
     Game_map[0][0][3].types = CORRIDOR_HOR_MAPTYPE;
 
@@ -220,9 +220,9 @@ void MapInit()
     Game_map[2][2][0].types = BATTLE_MAPTYPE;
     Game_map[2][2][0].status = BATTLING_MAPSTATUS;
     EntityAry_init(Game_map[2][2][0].entity, ENTITY_MAX);
-    Entity_insert(Game_map[2][2][0].entity, Entity_Init_P(50, 500, cyClient*2 + 400, MONSTER2_TYPE, 200));
-    Entity_insert(Game_map[2][2][0].entity, Entity_Init_P(50, 400, cyClient*2 + 500, MONSTER_TYPE, 150));
-    Entity_insert(Game_map[2][2][0].entity, Entity_Init_P(50, 600, cyClient*2 + 500, MONSTER_TYPE, 150));
+    Monster_Insert(Game_map[2][2][0].entity, Entity_Init_P(50, 500, cyClient*2 + 400, MONSTER2_TYPE, 200));
+    Monster_Insert(Game_map[2][2][0].entity, Entity_Init_P(50, 400, cyClient*2 + 500, MONSTER_TYPE, 150));
+    Monster_Insert(Game_map[2][2][0].entity, Entity_Init_P(50, 600, cyClient*2 + 500, MONSTER_TYPE, 150));
 
     Game_map[2][3][0].types = CORRIDOR_VER_MAPTYPE;
 
@@ -233,10 +233,10 @@ void MapInit()
     Game_map[2][4][0].types = BATTLE_MAPTYPE;
     Game_map[2][4][0].status = BATTLING_MAPSTATUS;
     EntityAry_init(Game_map[2][4][0].entity, ENTITY_MAX);
-    Entity_insert(Game_map[2][4][0].entity, Entity_Init_P(50, 250, cyClient*4 + 300, MONSTER_TYPE, 150));
-    Entity_insert(Game_map[2][4][0].entity, Entity_Init_P(50, 500, cyClient*4 + 300, MONSTER2_TYPE, 200));
-    Entity_insert(Game_map[2][4][0].entity, Entity_Init_P(50, 250, cyClient*4 + 410, MONSTER_TYPE, 150));
-    Entity_insert(Game_map[2][4][0].entity, Entity_Init_P(50, 500, cyClient*4 + 410, MONSTER_TYPE, 150));
+    Monster_Insert(Game_map[2][4][0].entity, Entity_Init_P(50, 250, cyClient*4 + 300, MONSTER_TYPE, 150));
+    Monster_Insert(Game_map[2][4][0].entity, Entity_Init_P(50, 500, cyClient*4 + 300, MONSTER2_TYPE, 200));
+    Monster_Insert(Game_map[2][4][0].entity, Entity_Init_P(50, 250, cyClient*4 + 410, MONSTER_TYPE, 150));
+    Monster_Insert(Game_map[2][4][0].entity, Entity_Init_P(50, 500, cyClient*4 + 410, MONSTER_TYPE, 150));
 
     Game_map[2][4][1].types = CORRIDOR_HOR_MAPTYPE;
     Game_map[2][4][2].left = 1;
@@ -265,7 +265,7 @@ void MapInit()
     Game_map[3][0][2].types = BATTLE_MAPTYPE;
     Game_map[3][0][2].status = BATTLING_MAPSTATUS;
     EntityAry_init(Game_map[3][0][2].entity, ENTITY_MAX);
-    Entity_insert(Game_map[3][0][2].entity, Entity_Init_P(50, cxClient*2 + cxClient/2, cyClient/2, BOSS_MONSTER_TYPE, 500));
+    Monster_Insert(Game_map[3][0][2].entity, Entity_Init_P(50, cxClient*2 + cxClient/2, cyClient/2, BOSS_MONSTER_TYPE, 500));
     //-----
 
     //Monster_Insert(Game_map[1][0][2].entity, Entity_Init_P(64, cxClient*2 + 200, 400, MONSTER_TYPE, 100));

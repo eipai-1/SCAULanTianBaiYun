@@ -160,6 +160,7 @@ void MonsterMoveType2(Charc_Info &Monster, Charc_Info &main_char, float time_lag
 
 void EntiInit1(float x, float y)
 {
+    //printf("Insert\n");
     Entity_insert(Global_entity, Entity_Init_P(30, x, y, LONGRANG_MONSTER_TYPE, 100));
     Global_entity.b[Global_entity.p - 1]->cnt = 0;
     Global_entity.b[Global_entity.p - 1]->movemode = MOVEMODE_SLEEP;
@@ -212,11 +213,12 @@ void Bossstage1(Charc_Info &Monster, Charc_Info main_char, float time_lag)//boss
             }
         }
     }
-    else{
+    else{//*
 
             if((Monster.x - main_char.x) * (Monster.x - main_char.x) +
                     (Monster.y - main_char.y) * (Monster.y - main_char.y) < Alert_range_squared)
                 Monster.movemode = MOVEMODE_SHIFT;
+        //*/
     }
 
 }
