@@ -98,7 +98,6 @@ void MonsterMoveType2(Charc_Info &Monster, Charc_Info &main_char, float time_lag
     }
     float x = Monster.vx * time_lag, y = Monster.vy * time_lag;
     int type = GlobalCollisionDet(Global_entity, Monster.x + x, Monster.y + y, Monster.width, Monster.id, NULL);
-    static int rnd_type = 1;
      if(Monster.movemode != MOVEMODE_SLEEP){
         if(Monster_rush_cnt >= Monster_rush_cd){
             if(Monster_rush_time_cnt < Monster_rush_time){

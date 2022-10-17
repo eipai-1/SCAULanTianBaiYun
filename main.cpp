@@ -883,7 +883,7 @@ void GameEventLeftClick(int cur_x, int cur_y)
 void GameInteract(int event, int id)
 {
     int Game_buff_to_choose[MAX_BUFF + 1];
-    for(int i = 1; i <= MAX_BUFF + 1; i++)Game_buff_to_choose[i] = 0;
+    for(int i = 1; i <= MAX_BUFF; i++)Game_buff_to_choose[i] = 0;
     int rnd;
     bool flag = true;
     switch(event){
