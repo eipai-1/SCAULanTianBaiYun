@@ -238,7 +238,7 @@ void MapInit()
     Entity_insert(Game_map[2][4][0].entity, Entity_Init_P(50, 250, cyClient*4 + 410, MONSTER_TYPE, 150));
     Entity_insert(Game_map[2][4][0].entity, Entity_Init_P(50, 500, cyClient*4 + 410, MONSTER_TYPE, 150));
 
-    Game_map[2][4][1].types = CORRIDOR_VER_MAPTYPE;
+    Game_map[2][4][1].types = CORRIDOR_HOR_MAPTYPE;
     Game_map[2][4][2].left = 1;
     Game_map[2][4][2].top = 0;
     Game_map[2][4][2].right = 0;
@@ -258,9 +258,9 @@ void MapInit()
 
     Game_map[3][0][1].types = CORRIDOR_HOR_MAPTYPE;
 
-    Game_map[3][0][2].left = 0;
+    Game_map[3][0][2].left = 1;
     Game_map[3][0][2].top = 0;
-    Game_map[3][0][2].right = 1;
+    Game_map[3][0][2].right = 0;
     Game_map[3][0][2].buttom = 0;
     Game_map[3][0][2].types = BATTLE_MAPTYPE;
     Game_map[3][0][2].status = BATTLING_MAPSTATUS;

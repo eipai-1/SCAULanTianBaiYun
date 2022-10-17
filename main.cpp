@@ -32,7 +32,7 @@ int game_start_selecting;
 //-----
 
 //地图相关参数
-int Map_depth_now = 0;
+int Map_depth_now = 3;
 Map Game_map[MAP_DEPTH][MAP_SIZE][MAP_SIZE];
 int Map_rooms_to_clear[MAP_DEPTH];
 float map_wall_width = 2;
